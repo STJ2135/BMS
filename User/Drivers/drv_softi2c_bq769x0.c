@@ -1,12 +1,13 @@
 #include "drv_softi2c_bq769x0.h"
 
-#include "main.h"
+#include <math.h>
 
+#include "main.h"
 #include "drv_soft_i2c.h"
 
 
 // 报警回调接口
-static BQ769X0_AlertOpsTypedef AlertOps;
+static BQ769X0_AlertOpsTypedf AlertOps;
 
 
 /* ADC增益 */
@@ -14,16 +15,7 @@ static float Gain = 0;
 static int16_t iGain = 0;
 static int8_t Adcoffset;
 
-static uint8_t TemNA = 6;
 static uint8_t TempSampleMode = 0;  // 温度采样模式 0:热敏电阻  1:IC温度
-//--------20,-16,-12,-8,-4,0,4,8, 100------------//
-// 10K NTC 5% 热敏电阻温度转换表
-static const uint16_t TemD[31] =
-{
-	2890,2817,2735,2642,2541,2431,2318,2202,2127,2007,  
-	1846,1687,1546,1422,1309,1202,1099,1001,907,817,
-	727,677,613,550,496,452,414,379,345,311,277
-};
 
 
 
@@ -155,78 +147,37 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 
 /************************************** utils **********************************************/
 
-// 将采集到的热敏电阻ADC值，转换成实际的温度值
-static int16_t TempChange(uint16_t uiADCV)
-{	
-	uint8_t ucA = 32, TemNK = 0;
-	int16_t uiD = 0;
-	
-	TemNK = TemNA;
-	if (uiADCV < TemD[TemNK])
-	{	
-		while (--ucA)
-		{	
-			if (TemNK < 30)
-			{	
-				TemNK++;
-				if (uiADCV >= TemD[TemNK])
-				{	
-					uiD = -200 + TemNK * (int)40;
-					uiD = uiD - ((int)40) * (uiADCV-TemD[TemNK]) / (TemD[TemNK-1]-TemD[TemNK]);
-					break;
-				}
-			}
-			else
-			{
-				uiD = 1000;		//100
-				break;
-			}
-		}
-	}
-	else if (uiADCV >= TemD[TemNK-1])			
-	{	
-		while (--ucA)
-		{	
-			if (TemNK > 1)
-			{	
-				TemNK--;
-				if(uiADCV < TemD[TemNK-1])
-				{	
-					uiD = -200 + TemNK * (int)40;
-					uiD = uiD - ((int)40) * (uiADCV-TemD[TemNK]) / (TemD[TemNK-1]-TemD[TemNK]);
-					break;
-				}
-			}
-			else 
-			{	
-				uiD = -200;		//-30
-				break;
-			}
-		}
-	}
-	else
-	{	
-		uiD = -200 + TemNK * (int)40;
-		uiD = uiD - ((int)40) * (uiADCV - TemD[TemNK]) / (TemD[TemNK-1] - TemD[TemNK]);
-	}
-	TemNA = TemNK;
-	
-	if(uiD&0x8000)
-	{
-		uiD &= ~0x8000;
-		uiD = 0x8000 - uiD;
-		uiD = uiD * 90 / 100;
-		uiD &= 0x7fff;
-		//uiD = 0x8000-uiD;
-		uiD |= 0x8000;
-	}
-	else 
-	{
-		uiD = uiD * 90 / 100;
-	}
 
-	return uiD;
+// 热敏电阻阻值换算成温度
+static float TempChange(float	Rt)
+{
+	uint8_t buffer[16];
+
+	float temp = 0;
+
+	// 热敏电阻在T2常温下的标称阻值,我买的是10K
+	float Rp = 10000;
+
+	// 该热敏电阻在开尔文温度下的,热敏电阻阻值为10K时对应的温度为25度
+	float T2 = 273.15 + 25;
+
+	// B值:3935、3950
+	float Bx = 3950;
+
+	// 开尔文温度值
+	float Ka = 273.15;
+
+	// 打印出热敏电阻的实时阻值可与购买链接的阻值与温度对应表对照查看
+	//sprintf((char *)buffer, "%f", Rt);
+	//BQ769X0_INFO("Rts value:%s", buffer);
+
+	temp = 1 / (1 / T2 + log(Rt / Rp) / Bx)- Ka + 0.5;
+
+	return temp;
 }
+
+
+
 
 // CRC8校验
 static uint8_t CRC8(uint8_t *ptr, uint8_t len, uint8_t key)
@@ -604,9 +555,11 @@ void BQ769X0_UpdateTsTemp(void)
 {
 	uint8_t index;
 	uint16_t iTemp = 0;
-	uint32_t v_tsx = 0;
+	float v_tsx = 0;
+	float Rts = 0;
 	uint8_t *pRawADCData = NULL;
 
+	
 	if (TempSampleMode != 0)
 	{
 		TempSampleMode = 0;
@@ -623,12 +576,20 @@ void BQ769X0_UpdateTsTemp(void)
  	}
 
 	pRawADCData = &Registers.TS1.TS1Byte.TS1_HI;
-	for(index = 0; index < BQ769X0_TMEP_MAX; index++)
+	for(index = 0; index < BQ769X0_TMEP_MAX; index++, pRawADCData += 2)
 	{
+		// 读出ADC值
 		iTemp = (uint16_t)(*pRawADCData << 8) | *(pRawADCData + 1);
-		v_tsx = (uint32_t)iTemp * 382 / 1000;
-		BQ769X0_SampleData.TsxTemperature[index] = TempChange(v_tsx) / 10.0;	/*现在是电阻值，需要根据NTC电阻的数据表查表得到对应的温度值*/
-		pRawADCData += 2;
+		
+		// 手册上公式是直接用Uv单位,在这我换成V单位
+		v_tsx = iTemp * 0.000382;
+
+		// Rts:热敏电阻阻值
+		// 根据adc值算出热敏电阻阻值,单位:Ω
+		Rts = (10000 * v_tsx) / (3.3 - v_tsx);		
+
+		// 根据电阻值算出对应的温度值
+		BQ769X0_SampleData.TsxTemperature[index] = TempChange(Rts);
 	}
 }
 

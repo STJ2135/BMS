@@ -43,8 +43,7 @@ BMS_AnalysisDataTypedef BMS_AnalysisData =
 
 
 
-// 三元锂电池 SOC开路电压法计算数据表
-// 支持磷酸铁锂、钛酸锂也得做一张这个表
+// 三元锂电池 SOC 开路电压法计算数据表
 uint16_t SocOcvTab[101]=
 {
 	3282, // 0%~1%	

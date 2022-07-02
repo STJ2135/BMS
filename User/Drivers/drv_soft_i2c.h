@@ -8,7 +8,7 @@
 #include "stm32f1xx_hal.h"
 
 
-#define I2C_DEBUG_LEVEL 1
+#define I2C_DEBUG_LEVEL 3
 
 #if I2C_DEBUG_LEVEL == 0
 #define I2C_INFO(fmt, arg...) 
