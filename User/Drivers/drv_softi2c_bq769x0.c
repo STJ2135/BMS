@@ -7,7 +7,7 @@
 
 
 // 报警回调接口
-static BQ769X0_AlertOpsTypedf AlertOps;
+static BQ769X0_AlertOpsTypedef AlertOps;
 
 
 /* ADC增益 */

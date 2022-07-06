@@ -6,6 +6,7 @@
 
 #include "bms_monitor.h"
 #include "bms_energy.h"
+#include "bms_info.h"
 #include "bms_global.h"
 #include "bms_debug.h"
 
@@ -97,6 +98,21 @@ static void BMS_CmdLoadDetect(void)
 MSH_CMD_EXPORT(BMS_CmdLoadDetect, Load Detect);
 
 
+
+
+
+static void BMS_CmdInfoEnable(void)
+{
+	BMS_InfoStatePrintf(BMS_STATE_ENABLE);
+}
+MSH_CMD_EXPORT(BMS_CmdInfoEnable, Info Printf Enable);
+
+
+static void BMS_CmdInfoDisable(void)
+{
+	BMS_InfoStatePrintf(BMS_STATE_DISABLE);
+}
+MSH_CMD_EXPORT(BMS_CmdInfoDisable, Info Printf Disable);
 /**********************************************************************************/
 
 

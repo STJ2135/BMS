@@ -29,11 +29,12 @@
 
 
 
-
+static bool FlagInfoPrintf = true;
 
 static void BMS_InfoTaskEntry(void *paramter);
 
 static void BMS_InfoPrintf(void);
+static void BMS_InfoBatCapacityIndicator(void);
 
 
 
@@ -65,21 +66,25 @@ static void BMS_InfoTaskEntry(void *paramter)
 {
 	while(1)
 	{
-		BMS_InfoPrintf();		
+		if (FlagInfoPrintf == true)
+		{
+			BMS_InfoPrintf();
+		}
+		BMS_InfoBatCapacityIndicator();
 		rt_thread_mdelay(INFO_TASK_PERIOD);
 	}
 }
 
 
-// 电量指示灯
-static void BMS_BattLow(void)
+// 电池容量指示灯
+static void BMS_InfoBatCapacityIndicator(void)
 {
 	if (BMS_AnalysisData.SOC == 0)
 	{
 		HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, GPIO_PIN_SET);
 		HAL_GPIO_WritePin(LED2_GPIO_Port, LED2_Pin, GPIO_PIN_SET);
 		HAL_GPIO_WritePin(LED3_GPIO_Port, LED3_Pin, GPIO_PIN_SET);
-		HAL_GPIO_WritePin(LED4_GPIO_Port, LED4_Pin, GPIO_PIN_SET);		
+		HAL_GPIO_WritePin(LED4_GPIO_Port, LED4_Pin, GPIO_PIN_SET);
 	}
 	else if (BMS_AnalysisData.SOC <= 0.25)
 	{
@@ -133,10 +138,7 @@ static void BMS_InfoPrintf(void)
 
 	rt_kprintf("\r\n");
 
-	
-	
-	
-	BMS_BattLow();
+
 
 	
 	// SOC
@@ -244,4 +246,18 @@ static void BMS_InfoPrintf(void)
 	BMS_INFO("/*************************************************************/\r\n\r\n");
 }
 
+
+
+
+void BMS_InfoStatePrintf(BMS_StateTypedef NewState)
+{
+	if (NewState == BMS_STATE_ENABLE)
+	{
+		FlagInfoPrintf = true;
+	}
+	else if (NewState == BMS_STATE_DISABLE)
+	{
+		FlagInfoPrintf = false;
+	}
+}
 

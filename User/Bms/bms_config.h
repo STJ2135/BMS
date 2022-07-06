@@ -74,10 +74,10 @@
 #define INIT_UV_PROTECT			TLB_UV_PROTECT			// 单体欠压保护电压(V)(注意BQ769X0 UV范围：1.58~3.10V)
 #define INIT_UV_RELIEVE			TLB_UV_RELIEVE			// 单体欠压恢复电压(V)
 
-#define INIT_SHUTDOWN_VOLTAGE	TLB_SHUTDOWN_VOLTAGE	// 自动关机电压(V),未考虑预留
+#define INIT_SHUTDOWN_VOLTAGE	TLB_SHUTDOWN_VOLTAGE	// 自动关机电压(V),暂未使用,预留
 #define INIT_BALANCE_VOLTAGE	TLB_BALANCE_VOLTAGE		// 均衡起始电压(V)
 
-#define INIT_BALANCE_CURRENT_MAX	0.6		// 最大均衡电流(A),未考虑预留
+#define INIT_BALANCE_CURRENT_MAX	0.6		// 最大均衡电流(A),暂未使用,预留
 #define	INIT_OCC_MAX				2.2		// 最大充电电流(A)
 #define	INIT_OCD_MAX				2.2		// 最大放电电流(A)
 

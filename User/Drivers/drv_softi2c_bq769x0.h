@@ -633,12 +633,12 @@ typedef struct
 	void (*ovrd)(void);		// BQ769X0 报警引脚由用户外围电路强行触发
 	void (*device)(void);	// BQ769X0 设备故障报警
 	void (*cc)(void);		// BQ769X0 库仑计采样完成
-}BQ769X0_AlertOpsTypedf;
+}BQ769X0_AlertOpsTypedef;
 
 // 初始化数据结构体
 typedef struct
 {
-	BQ769X0_AlertOpsTypedf AlertOps;
+	BQ769X0_AlertOpsTypedef AlertOps;
 	BQ769X0_ConfigDataTypedef ConfigData;
 }BQ769X0_InitDataTypedef;
 

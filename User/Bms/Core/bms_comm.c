@@ -39,7 +39,7 @@ void BMS_CommInit(void)
 	rt_thread_t thread;
 
 
-	thread = rt_thread_create("Comm", 
+	thread = rt_thread_create("comm", 
 							   BMS_CommTaskEntry, 
 							   NULL,
 							   COMM_TASK_STACK_SIZE,

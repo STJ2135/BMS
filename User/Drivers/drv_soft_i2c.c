@@ -168,7 +168,7 @@ static inline uint8_t I2C_WaitACK(struct I2C_BusTypeDef *bus)
 	bus->udelay(1);
 	SCL_H(bus);
 	SDA_SetInMode(bus);
-	ack = !GET_SDA(bus);    /* ACK : SDA pin is pulled low */\
+	ack = !GET_SDA(bus);    /* ACK : SDA pin is pulled low */
 	SDA_SetOutMode(bus);
 	I2C_INFO("%s", ack ? "ACK" : "NACK");
 	SCL_L(bus);
