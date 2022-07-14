@@ -4,7 +4,7 @@
 #include "bms_type.h"
 
 void BMS_InfoInit(void);
-void BMS_InfoStatePrintf(BMS_StateTypedef NewState);
+void BMS_InfoSetPrintf(BMS_StateTypedef NewState);
 
 
 #endif

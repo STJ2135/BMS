@@ -101,18 +101,18 @@ MSH_CMD_EXPORT(BMS_CmdLoadDetect, Load Detect);
 
 
 
-static void BMS_CmdInfoEnable(void)
+static void BMS_CmdOpenInfo(void)
 {
-	BMS_InfoStatePrintf(BMS_STATE_ENABLE);
+	BMS_InfoSetPrintf(BMS_STATE_ENABLE);
 }
-MSH_CMD_EXPORT(BMS_CmdInfoEnable, Info Printf Enable);
+MSH_CMD_EXPORT(BMS_CmdOpenInfo, Open Info Printf);
 
 
-static void BMS_CmdInfoDisable(void)
+static void BMS_CmdCloseInfo(void)
 {
-	BMS_InfoStatePrintf(BMS_STATE_DISABLE);
+	BMS_InfoSetPrintf(BMS_STATE_DISABLE);
 }
-MSH_CMD_EXPORT(BMS_CmdInfoDisable, Info Printf Disable);
+MSH_CMD_EXPORT(BMS_CmdCloseInfo, Close Info Printf);
 /**********************************************************************************/
 
 

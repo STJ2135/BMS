@@ -141,14 +141,15 @@ static void BMS_AnalysisEasy(void)
 
 
 
-// 温度校准,锂电池会因为温度的变化而影响电池容量
+// 温度校准
+// 锂电池充放电时温度的变化会影响充放电时电压与时间的关系,进而影响电池实时容量
 static void BMS_AnalysisTempCal(void)
 {
 	static int16_t LastTemp = 0;
 
-	uint8_t  Ratio; 	// 校准比率
+	uint8_t  Ratio; 	// 校准倍率
 	uint16_t RateTemp;	
-	int16_t MinTemp = BMS_MonitorData.CellTemp[0] * 10;
+	int16_t MinTemp = BMS_MonitorData.CellTemp[0] * 10; // 小数转化成整数,方便计算
 
 
 	if (BMS_MonitorData.CellTempEffectiveNumber == 0)
@@ -156,9 +157,10 @@ static void BMS_AnalysisTempCal(void)
 		return;
 	}
 
-
 	// 判断温度变化是否超过1度
-	if( MinTemp > LastTemp)  
+	// 超过1度则校准一次容量
+	// 未超过则不执行下面校准
+	if( MinTemp > LastTemp)
 	{
 		if (MinTemp - LastTemp >= 10)
 		{
@@ -171,7 +173,7 @@ static void BMS_AnalysisTempCal(void)
 	}
 	else
 	{
-		if (LastTemp - MinTemp >= 10) 
+		if (LastTemp - MinTemp >= 10)
 		{
 			LastTemp = MinTemp;
 		}
@@ -181,14 +183,26 @@ static void BMS_AnalysisTempCal(void)
 		}
 	}
 
+
+	// 确定每一摄氏度的校准倍率
+	// 该校准倍率的由来是根据不同温度下的放电曲线来的
+	// 放电曲线：http://www.doczj.com/doc/1510977503.html
+	// 上面链接的放电曲线跟这份代码的校准区间的参数有所不同	
+	// 搜了几个三元锂电池的放电温度特性曲线,都是以25度常温为标准,25度时容量不受温度影响
+
 	
-	// 确定校准比率
-	if (MinTemp >= 250)                             
+	if (MinTemp >= 250)
 	{
+		// 温度大于25度时,每1度的倍率为0.001
+		// 大于常温放电时间变长,就可以理解为容量增加
+		// 增加的容量为：0.001 * (最小温度-常温)
 		Ratio = 1;
 	}
 	else if (MinTemp >= 100 && MinTemp < 250)   
 	{   
+		// 温度小于25度时,每1度的倍率为0.002
+		// 小于常温放电时间变短,就可以理解为容量减小
+		// 减小的容量为：0.002 * (最小温度-常温)
 		Ratio = 2;
 	}
 	else if (MinTemp >= 0 && MinTemp < 100)      
@@ -209,7 +223,17 @@ static void BMS_AnalysisTempCal(void)
 	}
 
 
+	// 该公式理解:
+	// 1000：表示为电池容量为100%
+	// ratio：表示为特定温度区间内,每一摄氏度容量衰减/增加的倍率
+	// (MinTemp - 250) / 10:高/低了多少度
+	// RateTemp:计算出来的就是电池衰减/增加百分比
 	RateTemp = 1000 + Ratio * (MinTemp - 250) / 10;
+
+
+	// 做了个上下限
+	// 不能超过105%
+	// 不能低于75%
 	if(RateTemp > TEMP_CAP_RATE_LIMITH_HIGH )
 	{
 		RateTemp = TEMP_CAP_RATE_LIMITH_HIGH;
@@ -364,8 +388,6 @@ static void BMS_AnalysisSocCheck(void)
 // 容量和SOC上电初始化
 static void BMS_AnalysisCapAndSocInit(void)
 {
-	uint16_t temp = BMS_MonitorData.CellData[0].CellVoltage * 1000;
-	
 	// soc计算
 	BMS_AnalysisData.SOC = BMS_AnalysisOcvToSoc(BMS_MonitorData.CellData[0].CellVoltage  * 1000) / 1000.0;
 

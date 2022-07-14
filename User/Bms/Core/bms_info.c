@@ -126,7 +126,7 @@ static void BMS_InfoPrintf(void)
 	BMS_INFO("/*************************************************************/");
 	
 	// 电池包实时容量
-	sprintf(str, "Battery Real Capacity = %0.1fA/H", BMS_AnalysisData.CapacityReal);
+	sprintf(str, "Battery Real Capacity = %0.3fA/H", BMS_AnalysisData.CapacityReal);
 	BMS_INFO("%s", str);	
 
 	// 电池包剩余容量
@@ -249,7 +249,7 @@ static void BMS_InfoPrintf(void)
 
 
 
-void BMS_InfoStatePrintf(BMS_StateTypedef NewState)
+void BMS_InfoSetPrintf(BMS_StateTypedef NewState)
 {
 	if (NewState == BMS_STATE_ENABLE)
 	{

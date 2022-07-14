@@ -98,7 +98,7 @@ void BMS_EnergyInit(void)
 		BMS_ERROR("Create Timer Fail");
 	}
 
-	BalanceSem = rt_sem_create("bsem", 1, RT_IPC_FLAG_FIFO);	
+	BalanceSem = rt_sem_create("bsem", 1, RT_IPC_FLAG_FIFO);
 }
 
 
