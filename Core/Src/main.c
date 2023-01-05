@@ -24,11 +24,17 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include <stdio.h>
 #include <rtthread.h>
 
 #include "board.h"
 
 #include "bms_app.h"
+
+#define DBG_TAG "main"
+#define DBG_LVL DBG_LOG
+#include "rtdbg.h"
+
 
 /* USER CODE END Includes */
 
@@ -99,16 +105,19 @@ int main(void)
   //Board_Initialize();
 
   BMS_SysInitialize();
-
+  
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+
+ //CAN_SendTest();
+ 
 	HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
 	//rt_kprintf("Hello RT-Thread!\r\n");
-	rt_thread_mdelay(500);
+	rt_thread_mdelay(1000);
 
     /* USER CODE END WHILE */
 

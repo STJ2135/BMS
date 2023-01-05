@@ -3,7 +3,7 @@
 
 void Board_Initialize(void)
 {
-	RS485_Initialize();
+	//RS485_Initialize();
 	CAN_Initialize();
 }
 

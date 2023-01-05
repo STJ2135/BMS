@@ -8,8 +8,12 @@
 #include "bms_energy.h"
 #include "bms_info.h"
 #include "bms_global.h"
-#include "bms_debug.h"
 
+
+
+#define DBG_TAG "cmd"
+#define DBG_LVL DBG_LOG
+#include "rtdbg.h"
 
 
 
@@ -88,11 +92,11 @@ static void BMS_CmdLoadDetect(void)
 {
 	if (Bms_HalMonitorLoadDetect() == true)
 	{
-		BMS_INFO("Load Detected");
+		LOG_I("Load Detected");
 	}
 	else
 	{		
-		BMS_INFO("No Load Was Detected");
+		LOG_I("No Load Was Detected");
 	}
 }
 MSH_CMD_EXPORT(BMS_CmdLoadDetect, Load Detect);

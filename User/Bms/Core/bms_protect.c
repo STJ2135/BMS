@@ -1,5 +1,3 @@
-#define BMS_DBG_TAG "Protect"
-
 #include <stdio.h>
 #include <stdbool.h>
 #include <rtthread.h>
@@ -10,14 +8,17 @@
 #include "bms_hal_control.h"
 #include "bms_monitor.h"
 #include "bms_global.h"
-#include "bms_debug.h"
 
+
+#define DBG_TAG "protect"
+#define DBG_LVL DBG_LOG
+#include "rtdbg.h"
 
 
 
 // thread config
-#define PROTECT_TASK_STACK_SIZE	512
-#define PROTECT_TASK_PRIORITY	10
+#define PROTECT_TASK_STACK_SIZE	256
+#define PROTECT_TASK_PRIORITY	20
 #define PROTECT_TASK_TIMESLICE	25
 
 #define PROTECT_TASK_PERIOD		200
@@ -89,7 +90,7 @@ void BMS_ProtectInit(void)
 
 	if (thread == NULL)
 	{
-		BMS_ERROR("Create Task Fail");
+		LOG_E("Create Task Fail");
 	}
 
 	rt_thread_startup(thread);
@@ -102,7 +103,7 @@ void BMS_ProtectInit(void)
 
 	if (pTimerProtect == NULL)
 	{
-		BMS_ERROR("Create Timer Fail");
+		LOG_E("Create Timer Fail");
 	}
 }
 
@@ -142,7 +143,7 @@ static void BMS_ProtectTimerEntry(void *paramter)
 	(void)paramter;
 	ProtectState = PROTECT_STATE_RELIEVE;
 
-	BMS_INFO("Protect Timer Tigger");
+	LOG_I("Protect Timer Tigger");
 }
 
 // 启动用户保护任务的定时器
@@ -154,7 +155,7 @@ static void BMS_ProtectStartTimer(uint32_t sec)
 	rt_timer_control(pTimerProtect, RT_TIMER_CTRL_SET_TIME, &tick);
 	rt_timer_start(pTimerProtect);
 
-	BMS_INFO("Protect Timer Start");
+	LOG_I("Protect Timer Start");
 }
 
 
@@ -183,7 +184,7 @@ static void BMS_ChargeMonitor(void)
 			BMS_ProtectAlert = FlAG_ALERT_OCC;
 			ProtectState = PROTECT_STATE_RELIEVE_WAIT;
 
-			BMS_WARNING("OCC Tigger");
+			LOG_W("OCC Tigger");
 		}
 	}
 	else if (BMS_MonitorData.CellTempEffectiveNumber == 0)
@@ -198,7 +199,7 @@ static void BMS_ChargeMonitor(void)
 		BMS_ProtectAlert = FlAG_ALERT_OTC;	
 		ProtectState = PROTECT_STATE_RELIEVE_WAIT;
 		
-		BMS_WARNING("OTC Tigger");
+		LOG_W("OTC Tigger");
 	}
 	else if (BMS_MonitorData.CellTemp[0] < BMS_ProtectParam.LTCProtect)
 	{
@@ -207,7 +208,7 @@ static void BMS_ChargeMonitor(void)
 		BMS_ProtectAlert = FlAG_ALERT_LTC;	
 		ProtectState = PROTECT_STATE_RELIEVE_WAIT;		
 
-		BMS_WARNING("LTC Tigger");
+		LOG_W("LTC Tigger");
 	}
 	else
 	{
@@ -231,7 +232,7 @@ static void BMS_DischargeMonitor(void)
 		BMS_ProtectAlert = FlAG_ALERT_OTD;
 		ProtectState = PROTECT_STATE_RELIEVE_WAIT;
 
-		BMS_WARNING("OTD Tigger");
+		LOG_W("OTD Tigger");
 	}
 	else if (BMS_MonitorData.CellTemp[0] < BMS_ProtectParam.LTDProtect)
 	{
@@ -241,7 +242,7 @@ static void BMS_DischargeMonitor(void)
 		ProtectState = PROTECT_STATE_RELIEVE_WAIT;
 		
 
-		BMS_WARNING("LTD Tigger");
+		LOG_W("LTD Tigger");
 	}
 }
 
@@ -286,7 +287,7 @@ static void BMS_ProtectRelieveWait(void)
 			{
 				ProtectState = PROTECT_STATE_RELIEVE;
 
-				BMS_INFO("OV Relieve");
+				LOG_I("OV Relieve");
 			}
 		}break;
 
@@ -296,7 +297,7 @@ static void BMS_ProtectRelieveWait(void)
 			{
 				ProtectState = PROTECT_STATE_RELIEVE;
 
-				BMS_INFO("UV Relieve");
+				LOG_I("UV Relieve");
 			}
 		}break;
 
@@ -306,7 +307,7 @@ static void BMS_ProtectRelieveWait(void)
 			{
 				ProtectState = PROTECT_STATE_RELIEVE;
 
-				BMS_INFO("OTC Relieve");
+				LOG_I("OTC Relieve");
 			}
 		}break;
 
@@ -316,7 +317,7 @@ static void BMS_ProtectRelieveWait(void)
 			{
 				ProtectState = PROTECT_STATE_RELIEVE;
 
-				BMS_INFO("OTD Relieve");
+				LOG_I("OTD Relieve");
 			}
 		}break;
 
@@ -326,7 +327,7 @@ static void BMS_ProtectRelieveWait(void)
 			{
 				ProtectState = PROTECT_STATE_RELIEVE;
 
-				BMS_INFO("LTC Relieve");
+				LOG_I("LTC Relieve");
 			}
 		}break;
 
@@ -336,7 +337,7 @@ static void BMS_ProtectRelieveWait(void)
 			{
 				ProtectState = PROTECT_STATE_RELIEVE;
 
-				BMS_INFO("LTD Relieve");
+				LOG_I("LTD Relieve");
 			}
 		}break;
 
@@ -374,7 +375,7 @@ static void BMS_ProtectRelieve(void)
 	BMS_ProtectAlert = FlAG_ALERT_NO;	
 	ProtectState = PROTECT_STATE_MONITOR;
 
-	BMS_INFO("Protect Relieve");
+	LOG_I("Protect Relieve");
 }
 
 
@@ -398,7 +399,7 @@ void BMS_ProtectHwMonitor(void)
 			BMS_ProtectStartTimer(BMS_ProtectParam.OCDRelieve);
 			ProtectState = PROTECT_STATE_RELIEVE_WAIT;
 
-			BMS_WARNING("OCD Tigger");
+			LOG_W("OCD Tigger");
 		}break;
 
 		case FlAG_ALERT_SCD:
@@ -406,21 +407,21 @@ void BMS_ProtectHwMonitor(void)
 			BMS_ProtectStartTimer(BMS_ProtectParam.SCDRelieve);
 			ProtectState = PROTECT_STATE_RELIEVE_WAIT;
 
-			BMS_WARNING("SCD Tigger");
+			LOG_W("SCD Tigger");
 		}break;
 
 		case FlAG_ALERT_OV:
 		{
 			ProtectState = PROTECT_STATE_RELIEVE_WAIT;
 			
-			BMS_WARNING("OV Tigger");
+			LOG_W("OV Tigger");
 		}break;
 
 		case FlAG_ALERT_UV:
 		{
 			ProtectState = PROTECT_STATE_RELIEVE_WAIT;
 
-			BMS_WARNING("UV Tigger");
+			LOG_W("UV Tigger");
 		}break;
 
 		default:
@@ -429,6 +430,7 @@ void BMS_ProtectHwMonitor(void)
 		}break;
 	}
 }
+
 
 
 // 放电过流(OCD)硬件触发
@@ -476,13 +478,13 @@ void BMS_ProtectHwUV(void)
 
 void BMS_ProtectHwDevice(void)
 {
-	BMS_INFO("BMS_ProtectHwDevice");
+	LOG_W("BMS_ProtectHwDevice");
 }
 
 
 void BMS_ProtectHwOvrd(void)
 {
-	BMS_INFO("BMS_ProtectHwOvrd");
+	LOG_W("BMS_ProtectHwOvrd");
 }
 
 

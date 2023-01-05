@@ -1,5 +1,3 @@
-#define BMS_DBG_TAG "Comm"
-
 #include <stdio.h>
 #include <rtthread.h>
 
@@ -14,7 +12,11 @@
 #include "bms_energy.h"
 #include "bms_analysis.h"
 #include "bms_global.h"
-#include "bms_debug.h"
+
+
+#define DBG_TAG "comm"
+#define DBG_LVL DBG_LOG
+#include "rtdbg.h"
 
 
 
@@ -48,7 +50,7 @@ void BMS_CommInit(void)
 
 	if (thread == NULL)
 	{
-		BMS_ERROR("Create Task Fail");
+		LOG_E("Create Task Fail");
 	}
 
 	rt_thread_startup(thread);

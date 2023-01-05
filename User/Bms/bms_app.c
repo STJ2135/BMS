@@ -54,7 +54,7 @@ void BMS_SysInitialize(void)
 	BMS_AnalysisInit();	// 电池分析初始化
 	BMS_EnergyInit();	// 能量管理初始化
 	BMS_InfoInit();		// 信息管理初始化
-	BMS_CommInit();		// 通信管理初始化
+	//BMS_CommInit();		// 通信管理初始化
 }
 
 

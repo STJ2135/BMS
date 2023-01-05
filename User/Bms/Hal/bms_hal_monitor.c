@@ -6,8 +6,6 @@
 #include "bms_global.h"
 #include "bms_utils.h"
 
-#include "bms_debug.h"
-
 #include "drv_softi2c_bq769x0.h"
 
 

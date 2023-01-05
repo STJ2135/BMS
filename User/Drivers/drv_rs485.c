@@ -8,6 +8,12 @@
 
 
 
+#define DBG_TAG "drv_rs485"
+#define DBG_LVL DBG_LOG
+#include "rtdbg.h"
+
+
+
 uint8_t rc;
 
 void RS485_Initialize(void)
@@ -41,7 +47,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
 	if(huart->Instance == USART2)
 	{
-		rt_kprintf("rs485 rx done\r\n");
+		LOG_D("rs485 rx done");
 		RS485_TransmitState(RS485_TX);
 		HAL_UART_Transmit_IT(&huart2, &rc, 1);
 	}
@@ -52,7 +58,7 @@ void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
 {
 	if(huart->Instance == USART2)
 	{
-		rt_kprintf("rs485 tx done\r\n");
+		LOG_D("rs485 tx done");
 		RS485_TransmitState(RS485_RX);
 		HAL_UART_Receive_IT(&huart2, &rc, 1);
 	}

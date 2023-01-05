@@ -1,5 +1,3 @@
-#define BMS_DBG_TAG "Energy"
-
 #include <stdio.h>
 #include <stdbool.h>
 
@@ -13,13 +11,17 @@
 #include "bms_analysis.h"
 #include "bms_Protect.h"
 #include "bms_global.h"
-#include "bms_debug.h"
 
+
+
+#define DBG_TAG "energy"
+#define DBG_LVL DBG_LOG
+#include "rtdbg.h"
 
 
 // thread config
 #define ENERGY_TASK_STACK_SIZE	512
-#define ENERGY_TASK_PRIORITY	12
+#define ENERGY_TASK_PRIORITY	22
 #define ENERGY_TASK_TIMESLICE	25
 
 #define ENERGY_TASK_PERIOD		200
@@ -79,7 +81,7 @@ void BMS_EnergyInit(void)
 
 	if (thread == NULL)
 	{
-		BMS_ERROR("Create Task Fail");
+		LOG_E("Create Task Fail");
 	}
 
 	rt_thread_startup(thread);
@@ -95,10 +97,10 @@ void BMS_EnergyInit(void)
 
 	if (pTimerBalance == NULL)
 	{
-		BMS_ERROR("Create Timer Fail");
+		LOG_E("Create Timer Fail");
 	}
 
-	BalanceSem = rt_sem_create("bsem", 1, RT_IPC_FLAG_FIFO);
+	BalanceSem = rt_sem_create("bsem", 1, RT_IPC_FLAG_PRIO);
 }
 
 
@@ -138,7 +140,7 @@ static void BMS_BalanceTimerEntry(void *paramter)
 	// 用于均衡电压回升计时
 	BalanceVoltRiseTime = rt_tick_from_millisecond(BALANCE_VOLT_RISE_DELAY) + rt_tick_get();
 	
-	BMS_INFO("Balance Timer End");
+	LOG_I("Balance Timer End");
 }
 
 // 启动均衡定时器计数任务
@@ -150,7 +152,7 @@ static void BMS_BalanceStartTimer(uint32_t sec)
 	rt_timer_control(pTimerBalance, RT_TIMER_CTRL_SET_TIME, &tick);
 	rt_timer_start(pTimerBalance);
 
-	BMS_INFO("Balance Timer Start");
+	LOG_I("Balance Timer Start");
 }
 
 
@@ -174,7 +176,7 @@ static void BMS_EnergyChgDsgManage(void)
 				{
 					BMS_HalCtrlCharge(BMS_STATE_DISABLE);
 
-					BMS_INFO("Stop Charge");
+					LOG_I("Stop Charge");
 				}
 			}break;
 
@@ -184,7 +186,7 @@ static void BMS_EnergyChgDsgManage(void)
 				{
 					BMS_HalCtrlDischarge(BMS_STATE_DISABLE);
 
-					BMS_INFO("Stop Discharge");
+					LOG_I("Stop Discharge");
 				}
 			}break;
 
@@ -203,7 +205,7 @@ static void BMS_EnergyChgDsgManage(void)
 
 							rt_sem_release(BalanceSem);
 							
-							BMS_INFO("Start Charge");
+							LOG_I("Start Charge");
 						}
 					}
 				}
@@ -218,7 +220,7 @@ static void BMS_EnergyChgDsgManage(void)
 					{
 						BMS_HalCtrlDischarge(BMS_STATE_ENABLE);
 						
-						BMS_INFO("Start Discharge");
+						LOG_I("Start Discharge");
 					}
 				}
 			}break;	
@@ -363,7 +365,7 @@ static void BMS_EnergyBalanceManage(void)
 							
 							if (result == true)
 							{
-								BMS_INFO("Balance Cell:%d", CellNumber + 1);
+								LOG_I("Balance Cell:%d", CellNumber + 1);
 								BMS_EnergyData.BalanceRecord |= 1 << CellNumber;
 							}
 						}
@@ -388,7 +390,7 @@ static void BMS_EnergyBalanceManage(void)
 
 						BalanceFlag = true;
 						
-						BMS_INFO("Balance Start");
+						LOG_I("Balance Start");
 
 						return;
 					}

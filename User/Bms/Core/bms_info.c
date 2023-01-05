@@ -1,5 +1,3 @@
-#define BMS_DBG_TAG "Info"
-
 #include <stdio.h>
 #include <rtthread.h>
 
@@ -14,14 +12,18 @@
 #include "bms_energy.h"
 #include "bms_analysis.h"
 #include "bms_global.h"
-#include "bms_debug.h"
+
+
+#define DBG_TAG "info"
+#define DBG_LVL DBG_LOG
+#include "rtdbg.h"
 
 
 
 
 // thread config
 #define INFO_TASK_STACK_SIZE	512	
-#define INFO_TASK_PRIORITY		13
+#define INFO_TASK_PRIORITY		25
 #define INFO_TASK_TIMESLICE		25
 
 #define INFO_TASK_PERIOD		2000
@@ -53,7 +55,7 @@ void BMS_InfoInit(void)
 
 	if (thread == NULL)
 	{
-		BMS_ERROR("Create Task Fail");
+		LOG_E("Create Task Fail");
 	}
 
 	rt_thread_startup(thread);
@@ -123,15 +125,15 @@ static void BMS_InfoPrintf(void)
 	uint8_t index;
 	char str[64];
 
-	BMS_INFO("/*************************************************************/");
+	LOG_D("/*************************************************************/");
 	
 	// 电池包实时容量
 	sprintf(str, "Battery Real Capacity = %0.3fA/H", BMS_AnalysisData.CapacityReal);
-	BMS_INFO("%s", str);	
+	LOG_D("%s", str);
 
 	// 电池包剩余容量
 	sprintf(str, "Battery Remain Capacity = %0.3fA/H", BMS_AnalysisData.CapacityRemain);
-	BMS_INFO("%s", str);
+	LOG_D("%s", str);
 
 
 
@@ -143,7 +145,7 @@ static void BMS_InfoPrintf(void)
 	
 	// SOC
 	sprintf(str, "Battery SOC = %0.1f%%", BMS_AnalysisData.SOC * 100);
-	BMS_INFO("%s", str);
+	LOG_D("%s", str);
 
 	/*
 	// SOH
@@ -167,30 +169,30 @@ static void BMS_InfoPrintf(void)
 
 	// 单体电芯最大电压
 	sprintf(str, "Cell Max Voltage = %0.3fV", BMS_AnalysisData.CellVoltMax);
-	BMS_INFO("%s", str);
+	LOG_D("%s", str);
 
 
 	// 单体电芯最小电压
 	sprintf(str, "Cell Min Voltage = %0.3fV", BMS_AnalysisData.CellVoltMin);
-	BMS_INFO("%s", str);
+	LOG_D("%s", str);
 
 	
 
 	// 最大电压差
 	sprintf(str, "Cell Max Voltage Difference = %0.3fV", BMS_AnalysisData.MaxVoltageDifference);
-	BMS_INFO("%s", str);
+	LOG_D("%s", str);
 
 
 
 	// 平均电压
 	sprintf(str, "Cell Average Voltage = %0.3fV", BMS_AnalysisData.AverageVoltage);
-	BMS_INFO("%s", str);
+	LOG_D("%s", str);
 
 
 
 	// 实时功率
 	sprintf(str, "Battery Real Power = %0.3fW", BMS_AnalysisData.PowerReal);
-	BMS_INFO("%s", str);
+	LOG_D("%s", str);
 
 
 
@@ -202,14 +204,14 @@ static void BMS_InfoPrintf(void)
 
 	// Battery Voltage
 	sprintf(str, "Battery Voltage = %0.3fV", BMS_MonitorData.BatteryVoltage);
-	BMS_INFO("%s", str);	
+	LOG_D("%s", str);	
 
 
 
 
 	// Battery Current
 	sprintf(str, "Battery Current = %0.3fA", BMS_MonitorData.BatteryCurrent);
-	BMS_INFO("%s", str);	
+	LOG_D("%s", str);	
 
 
 
@@ -218,7 +220,7 @@ static void BMS_InfoPrintf(void)
 	for (index = 0; index < BMS_MonitorData.CellTempEffectiveNumber; index++)
 	{
 		sprintf(str, "Tempature %d = %0.1f", index + 1, BMS_MonitorData.CellTemp[index]);
-		BMS_INFO("%s", str);
+		LOG_D("%s", str);
 	}
 
 
@@ -238,12 +240,12 @@ static void BMS_InfoPrintf(void)
 		index + 1, 
 		BMS_MonitorData.CellVoltage[index],
 		(BMS_EnergyData.BalanceRecord &  (1 << index)) > 0 ? "--->" : "");
-		BMS_INFO("%s", str);
+		LOG_D("%s", str);
 	}
 
 
 	
-	BMS_INFO("/*************************************************************/\r\n\r\n");
+	LOG_D("/*************************************************************/\r\n\r\n");
 }
 
 

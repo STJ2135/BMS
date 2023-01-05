@@ -1,5 +1,3 @@
-#define BMS_DBG_TAG "Monitor"
-
 #include <stdio.h>
 #include <rtthread.h>
 
@@ -9,15 +7,19 @@
 
 #include "bms_energy.h"
 #include "bms_global.h"
-#include "bms_debug.h"
 
+
+
+#define DBG_TAG "monitor"
+#define DBG_LVL DBG_LOG
+#include "rtdbg.h"
 
 
 
 
 // thread config
 #define MONITOR_TASK_STACK_SIZE	512
-#define MONITOR_TASK_PRIORITY	9
+#define MONITOR_TASK_PRIORITY	19
 #define MONITOR_TASK_TIMESLICE	25
 
 #define MONITOR_TASK_PERIOD		250
@@ -72,7 +74,7 @@ void BMS_MonitorInit(void)
 
    if (thread == NULL)
    {
-	   BMS_ERROR("Create Task Fail");
+	   LOG_E("Create Task Fail");
    }
 
 	rt_thread_startup(thread);
@@ -170,7 +172,7 @@ static void BMS_MonitorSysMode(void)
 			// 可以加唤醒处理逻辑
 			
 			BMS_GlobalParam.SysMode = BMS_MODE_STANDBY;
-			BMS_INFO("Wake Up");
+			LOG_I("Wake Up");
 		}
 		return;
 	}
@@ -193,7 +195,7 @@ static void BMS_MonitorSysMode(void)
 
 				rt_sem_release(BalanceSem);
 				
-				BMS_INFO("Entry Sleep Mode");
+				LOG_I("Entry Sleep Mode");
 			}
 		}
 		else
@@ -206,7 +208,7 @@ static void BMS_MonitorSysMode(void)
 		if (SysModeBackup != BMS_MODE_STANDBY)
 		{
 			SysModeBackup = BMS_MODE_STANDBY;
-			BMS_INFO("Entry Standby Mode");
+			LOG_I("Entry Standby Mode");
 		}
 	}
 	else if (BMS_MonitorData.BatteryCurrent >= 0.02)
@@ -218,7 +220,7 @@ static void BMS_MonitorSysMode(void)
 		if (SysModeBackup != BMS_MODE_CHARGE)
 		{
 			SysModeBackup = BMS_MODE_CHARGE;
-			BMS_INFO("Entry Charge Mode");
+			LOG_I("Entry Charge Mode");
 		}
 	}
 	else if (BMS_MonitorData.BatteryCurrent <= -0.02)
@@ -230,7 +232,7 @@ static void BMS_MonitorSysMode(void)
 		if (SysModeBackup != BMS_MODE_DISCHARGE)
 		{
 			SysModeBackup = BMS_MODE_DISCHARGE;
-			BMS_INFO("Entry Discharge Mode");
+			LOG_I("Entry Discharge Mode");
 		}
 	}
 }

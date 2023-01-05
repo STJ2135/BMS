@@ -21,8 +21,6 @@
 
 #define BQ769X0_DELAY(ms)		rt_thread_mdelay(ms)
 
-#define BQ769X0_MALLOC(size)	rt_malloc(size)
-#define BQ769X0_FREE(rmem)		rt_free(rmem)			
 
 /********************************* pin config **************************/
 // wake up

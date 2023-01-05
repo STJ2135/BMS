@@ -1,5 +1,3 @@
-#define BMS_DBG_TAG "Analysis"
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <rtthread.h>
@@ -11,15 +9,18 @@
 
 #include "bms_utils.h"
 #include "bms_global.h"
-#include "bms_debug.h"
 
 
+
+#define DBG_TAG "analysis"
+#define DBG_LVL DBG_LOG
+#include "rtdbg.h"
 
 
 
 // thread config
-#define ANALYSISI_TASK_STACK_SIZE	512
-#define ANALYSISI_TASK_PRIORITY		11
+#define ANALYSISI_TASK_STACK_SIZE	256
+#define ANALYSISI_TASK_PRIORITY		21
 #define ANALYSISI_TASK_TIMESLICE	25
 
 #define ANALYSISI_TASK_PERIOD		1000
@@ -89,7 +90,7 @@ void BMS_AnalysisInit(void)
 
 	if (thread == NULL)
 	{
-		BMS_ERROR("Create Task Fail");
+		LOG_E("Create Task Fail");
 	}
 
 	rt_thread_startup(thread);

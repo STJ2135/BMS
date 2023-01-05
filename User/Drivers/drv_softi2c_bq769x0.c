@@ -6,6 +6,15 @@
 #include "drv_soft_i2c.h"
 
 
+
+
+#define DBG_TAG "bq76920"
+#define DBG_LVL DBG_LOG
+#include "rtdbg.h"
+
+
+
+
 // 报警回调接口
 static BQ769X0_AlertOpsTypedef AlertOps;
 
@@ -151,8 +160,6 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 // 热敏电阻阻值换算成温度
 static float TempChange(float	Rt)
 {
-	uint8_t buffer[16];
-
 	float temp = 0;
 
 	// 热敏电阻在T2常温下的标称阻值,我买的是10K
@@ -225,7 +232,7 @@ static bool BQ769X0_WriteRegisterByte(uint8_t Register, uint8_t data)
 	
     if (I2C_TransferMessages(&i2c1, &msg, 1) != 1)
     {
-		BQ769X0_ERROR("Write Register Byte Fail");
+		LOG_E("Write Register Byte Fail");
 
 		return false;
     }
@@ -250,7 +257,7 @@ static bool BQ769X0_WriteRegisterByteWithCRC(uint8_t Register, uint8_t data)
 
     if (I2C_TransferMessages(&i2c1, &msg, 1) != 1)
     {
-		BQ769X0_ERROR("Write Register Byte With CRC Fail");
+		LOG_E("Write Register Byte With CRC Fail");
 
 		return false;
     }
@@ -278,7 +285,7 @@ static bool BQ769X0_WriteRegisterWordWithCRC(uint8_t Register, uint16_t data)
 
     if (I2C_TransferMessages(&i2c1, &msg, 1) != 1)
     {
-		BQ769X0_ERROR("Write Register Word With CRC Fail");
+		LOG_E("Write Register Word With CRC Fail");
 		return false;
     }
 
@@ -289,17 +296,8 @@ static bool BQ769X0_WriteRegisterWordWithCRC(uint8_t Register, uint16_t data)
 static bool BQ769X0_WriteBlockWithCRC(uint8_t startAddress, uint8_t *buffer, uint8_t length)
 {
 	uint8_t index;
-	uint8_t *bufferCRC, *pointer;
+	uint8_t bufferCRC[32] = {0}, *pointer;
 	struct I2C_MessageTypeDef msg = {0};
-
-	bufferCRC = (uint8_t *)BQ769X0_MALLOC(2 * length + 2);
-	if (NULL == bufferCRC)
-	{
-		BQ769X0_WARNING("Malloc Fail");
-
-		return false;
-    }
-
 
 	pointer = bufferCRC;
 	*pointer++ = BQ769X0_I2C_ADDR << 1;
@@ -323,10 +321,9 @@ static bool BQ769X0_WriteBlockWithCRC(uint8_t startAddress, uint8_t *buffer, uin
 
     if (I2C_TransferMessages(&i2c1, &msg, 1) != 1)
     {
-		BQ769X0_ERROR("Write Register Block With CRC Fail");
+		LOG_E("Write Register Block With CRC Fail");
 		return false;
     }
-	BQ769X0_FREE(bufferCRC);
 
     return true;	
 }
@@ -349,7 +346,7 @@ static bool BQ769X0_ReadRegisterByte(uint8_t Register, uint8_t *data)
 
     if (I2C_TransferMessages(&i2c1, msg, 2) != 2)
     {
-		BQ769X0_ERROR("Read Register Byte Fail");
+		LOG_E("Read Register Byte Fail");
 		return false;
     }
 
@@ -373,7 +370,7 @@ static bool BQ769X0_ReadRegisterByteWithCRC(uint8_t Register, uint8_t *data)
 
     if (I2C_TransferMessages(&i2c1, msg, 2) != 2)
     {
-		BQ769X0_ERROR("Read Register Byte With CRC Fail");
+		LOG_E("Read Register Byte With CRC Fail");
 
 		return false;
     }
@@ -385,7 +382,7 @@ static bool BQ769X0_ReadRegisterByteWithCRC(uint8_t Register, uint8_t *data)
 	crcValue = CRC8(crcInput, 2, CRC_KEY);
 	if (crcValue != readBuffer[1])
 	{
-		BQ769X0_ERROR("Read Register Byte CRC Check Fail");
+		LOG_E("Read Register Byte CRC Check Fail");
 		return false;
     }
 
@@ -413,7 +410,7 @@ static bool BQ769X0_ReadRegisterWordWithCRC(uint8_t Register, uint16_t *data)
 
     if (I2C_TransferMessages(&i2c1, msg, 2) != 2)
     {
-		BQ769X0_ERROR("Read Register Word With CRC Fail");
+		LOG_E("Read Register Word With CRC Fail");
 
 		return false;
     }
@@ -424,7 +421,7 @@ static bool BQ769X0_ReadRegisterWordWithCRC(uint8_t Register, uint16_t *data)
 	crcValue = CRC8(crcInput, 2, CRC_KEY);
 	if (crcValue != readBuffer[1])
 	{
-		BQ769X0_ERROR("Read Register Word CRC 1 Check Fail");
+		LOG_E("Read Register Word CRC 1 Check Fail");
 
 		return false;
 	}
@@ -444,18 +441,10 @@ static bool BQ769X0_ReadRegisterWordWithCRC(uint8_t Register, uint16_t *data)
 static bool BQ769X0_ReadBlockWithCRC(uint8_t Register, uint8_t *buffer, uint8_t length)
 {  	
 	uint8_t index, crcValue, crcInput[2];
-	uint8_t *readData, *startData;
+	uint8_t buf[32] = {0};
+	uint8_t *readData = buf;
 	struct I2C_MessageTypeDef msg[2] = {0};
 
-
-    startData = (uint8_t *)BQ769X0_MALLOC(2 * length);
-    if (NULL == startData)
-    {
-    	BQ769X0_WARNING("Malloc Fail"); 
-    	
-    	return false;
-    }
-    readData = startData;
 
 	msg[0].addr = BQ769X0_I2C_ADDR;
 	msg[0].flags = I2C_WR;	
@@ -469,8 +458,7 @@ static bool BQ769X0_ReadBlockWithCRC(uint8_t Register, uint8_t *buffer, uint8_t 
 
     if (I2C_TransferMessages(&i2c1, msg, 2) != 2)
     {
-    	BQ769X0_FREE(startData);
-		BQ769X0_ERROR("Read Register Block With CRC Cail");
+		LOG_E("Read Register Block With CRC Cail");
 		
 		return false;
     }
@@ -482,8 +470,7 @@ static bool BQ769X0_ReadBlockWithCRC(uint8_t Register, uint8_t *buffer, uint8_t 
 	readData++;
 	if (crcValue != *readData)
 	{
-		BQ769X0_FREE(startData);
-		BQ769X0_ERROR("Read Register Block CRC 1 Check Fail");
+		LOG_E("Read Register Block CRC 1 Check Fail");
 		
 		return false;	
 	}
@@ -501,8 +488,7 @@ static bool BQ769X0_ReadBlockWithCRC(uint8_t Register, uint8_t *buffer, uint8_t 
 
 		if (crcValue != *readData)
 		{
-			BQ769X0_FREE(startData);
-			BQ769X0_ERROR("Read Register Block CRC Check Fail");
+			LOG_E("Read Register Block CRC Check Fail");
 			
 			return false;		
 		}
@@ -511,8 +497,6 @@ static bool BQ769X0_ReadBlockWithCRC(uint8_t Register, uint8_t *buffer, uint8_t 
 			*buffer = *(readData - 1);
 		}
 	}
-
-	BQ769X0_FREE(startData);
 
 	return true;
 }
@@ -534,7 +518,7 @@ void BQ769X0_UpdateCellVolt(void)
 
  	if (BQ769X0_ReadBlockWithCRC(VC1_HI_BYTE, &(Registers.VCell1.VCell1Byte.VC1_HI), BQ769X0_CELL_MAX << 1) != true)
  	{
-		BQ769X0_ERROR("Update Cell Voltage Fail");
+		LOG_E("Update Cell Voltage Fail");
  	}
 	
 
@@ -565,14 +549,14 @@ void BQ769X0_UpdateTsTemp(void)
 		TempSampleMode = 0;
 		if (BQ769X0_WriteRegisterByteWithCRC(SYS_CTRL1, 0x18) != true)
 	 	{
-			BQ769X0_ERROR("Update Tsx Temperature Fail");
+			LOG_E("Update Tsx Temperature Fail");
 	 	}
 		BQ769X0_DELAY(2000);
 	}
 
 	if (BQ769X0_ReadBlockWithCRC(TS1_HI_BYTE, &(Registers.TS1.TS1Byte.TS1_HI), BQ769X0_TMEP_MAX << 1) != true)
  	{
-		BQ769X0_ERROR("Update Tsx Temperature Fail");
+		LOG_E("Update Tsx Temperature Fail");
  	}
 
 	pRawADCData = &Registers.TS1.TS1Byte.TS1_HI;
@@ -605,14 +589,14 @@ void BQ769X0_UpdateDieTemp(void)
 		TempSampleMode = 1;
 		if (BQ769X0_WriteRegisterByteWithCRC(SYS_CTRL1, 0x10) != true)
 	 	{
-			BQ769X0_ERROR("Update Die Temperature Fail");
+			LOG_E("Update Die Temperature Fail");
 	 	}
 		BQ769X0_DELAY(2000);
 	}
 
 	if (BQ769X0_ReadRegisterWordWithCRC(TS1_HI_BYTE, &Registers.TS1.TS1Word) != true)
  	{
-		BQ769X0_ERROR("Update Die Temperature Fail");
+		LOG_E("Update Die Temperature Fail");
  	}
 	
 	adc_value = (Registers.TS1.TS1Byte.TS1_HI << 8) | Registers.TS1.TS1Byte.TS1_LO;
@@ -628,7 +612,7 @@ void BQ769X0_UpdateCurrent(void)
 
 	if (BQ769X0_ReadRegisterWordWithCRC(CC_HI_BYTE, &Registers.CC.CCWord) != true)
  	{
-		BQ769X0_ERROR("Update Current Fail");
+		LOG_E("Update Current Fail");
  	}
 	
 	temp = Registers.CC.CCByte.CC_HI << 8 | Registers.CC.CCByte.CC_LO;
@@ -652,7 +636,7 @@ void BQ769X0_UpadteBatVolt(void)
 
 	if (BQ769X0_ReadRegisterWordWithCRC(BAT_HI_BYTE, &Registers.VBat.VBatWord) != true)
  	{
-		BQ769X0_ERROR("Update Battery Voltage Fail");
+		LOG_E("Update Battery Voltage Fail");
  	}
 
 	adc_value = Registers.VBat.VBatByte.BAT_HI << 8 | Registers.VBat.VBatByte.BAT_LO;
@@ -780,7 +764,7 @@ static void BQ769X0_Configuration(void)
 	|| ReadBuffer[6] != Registers.UVTrip
 	|| ReadBuffer[7] != Registers.CCCfg)
 	{
-		BQ769X0_ERROR("BQ769X0 config register fail,Please reset BMS board");
+		LOG_E("BQ769X0 config register fail,Please reset BMS board");
 
 		while(1);
 	}
@@ -942,7 +926,7 @@ void BQ769X0_Initialize(BQ769X0_InitDataTypedef *InitData)
 //	BQ769X0_INFO("OVTrip:%d", Registers.OVTrip);
 //	BQ769X0_INFO("UVTrip:%d", Registers.UVTrip);
 	
-	BQ769X0_INFO("BQ769X0 Initialize successful!");
+	LOG_I("BQ769X0 Initialize successful!");
 }
 
 
