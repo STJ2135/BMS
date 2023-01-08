@@ -6,6 +6,11 @@
 
 
 
+#define DBG_TAG "hal"
+#define DBG_LVL DBG_LOG
+#include "rtdbg.h"
+
+
 // BMS唤醒
 void BMS_HalCtrlWakeup(void)
 {

@@ -1,0 +1,152 @@
+/* This file contains stub implementations of the AUTOSAR RTE functions.
+   The stub implementations can be used for testing the generated code in
+   Simulink, for example, in SIL/PIL simulations of the component under
+   test. Note that this file should be replaced with an appropriate RTE
+   file when deploying the generated code outside of Simulink.
+
+   This file is generated for:
+   Atomic software component:  "test"
+   ARXML schema: "4.3"
+   File generated on: "03-Jan-2023 09:34:44"  */
+
+#ifndef Rte_test_h
+#define Rte_test_h
+#include "Rte_Type.h"
+#include "Compiler.h"
+
+
+
+/* Data access functions */
+#define Rte_IRead_Runnable_Step_BMS_Cmd_BMS_Cmd Rte_IRead_test_Runnable_Step_BMS_Cmd_BMS_Cmd
+
+Double Rte_IRead_Runnable_Step_BMS_Cmd_BMS_Cmd(void);
+
+#define Rte_IRead_Runnable_Step_BMS_CmdOpenBalan_BMS_CmdOpenBalan Rte_IRead_test_Runnable_Step_BMS_CmdOpenBalan_BMS_CmdOpenBalan
+
+Double Rte_IRead_Runnable_Step_BMS_CmdOpenBalan_BMS_CmdOpenBalan(void);
+
+#define Rte_IRead_Runnable_Step_BMS_CmdOpenCHG_BMS_CmdOpenCHG Rte_IRead_test_Runnable_Step_BMS_CmdOpenCHG_BMS_CmdOpenCHG
+
+Double Rte_IRead_Runnable_Step_BMS_CmdOpenCHG_BMS_CmdOpenCHG(void);
+
+#define Rte_IRead_Runnable_Step_BMS_CmdOpenDSG_BMS_CmdOpenDSG Rte_IRead_test_Runnable_Step_BMS_CmdOpenDSG_BMS_CmdOpenDSG
+
+Double Rte_IRead_Runnable_Step_BMS_CmdOpenDSG_BMS_CmdOpenDSG(void);
+
+#define Rte_IRead_Runnable_Step_current_current Rte_IRead_test_Runnable_Step_current_current
+
+Double Rte_IRead_Runnable_Step_current_current(void);
+
+#define Rte_IRead_Runnable_Step_voltage_V1_voltage_V1 Rte_IRead_test_Runnable_Step_voltage_V1_voltage_V1
+
+Double Rte_IRead_Runnable_Step_voltage_V1_voltage_V1(void);
+
+#define Rte_IRead_Runnable_Step_voltage_V2_voltage_V2 Rte_IRead_test_Runnable_Step_voltage_V2_voltage_V2
+
+Double Rte_IRead_Runnable_Step_voltage_V2_voltage_V2(void);
+
+#define Rte_IRead_Runnable_Step_voltage_V3_voltage_V3 Rte_IRead_test_Runnable_Step_voltage_V3_voltage_V3
+
+Double Rte_IRead_Runnable_Step_voltage_V3_voltage_V3(void);
+
+#define Rte_IRead_Runnable_Step_voltage_V4_voltage_V4 Rte_IRead_test_Runnable_Step_voltage_V4_voltage_V4
+
+Double Rte_IRead_Runnable_Step_voltage_V4_voltage_V4(void);
+
+#define Rte_IRead_Runnable_Step_voltage_V5_voltage_V5 Rte_IRead_test_Runnable_Step_voltage_V5_voltage_V5
+
+Double Rte_IRead_Runnable_Step_voltage_V5_voltage_V5(void);
+
+#define Rte_IWrite_Runnable_Step_Batt_State_Batt_State Rte_IWrite_test_Runnable_Step_Batt_State_Batt_State
+
+void Rte_IWrite_Runnable_Step_Batt_State_Batt_State(Double u);
+
+#define Rte_IWriteRef_Runnable_Step_Batt_State_Batt_State Rte_IWriteRef_test_Runnable_Step_Batt_State_Batt_State
+
+Double* Rte_IWriteRef_Runnable_Step_Batt_State_Batt_State(void);
+
+#define Rte_IWrite_Runnable_Step_SOC_SOC Rte_IWrite_test_Runnable_Step_SOC_SOC
+
+void Rte_IWrite_Runnable_Step_SOC_SOC(Double u);
+
+#define Rte_IWriteRef_Runnable_Step_SOC_SOC Rte_IWriteRef_test_Runnable_Step_SOC_SOC
+
+Double* Rte_IWriteRef_Runnable_Step_SOC_SOC(void);
+
+#define Rte_IWrite_Runnable_Step_OutCurrent_OutCurrent Rte_IWrite_test_Runnable_Step_OutCurrent_OutCurrent
+
+void Rte_IWrite_Runnable_Step_OutCurrent_OutCurrent(Double u);
+
+#define Rte_IWriteRef_Runnable_Step_OutCurrent_OutCurrent Rte_IWriteRef_test_Runnable_Step_OutCurrent_OutCurrent
+
+Double* Rte_IWriteRef_Runnable_Step_OutCurrent_OutCurrent(void);
+
+#define Rte_IWrite_Runnable_Step_OutBus_Voltage_OutBus_Voltage Rte_IWrite_test_Runnable_Step_OutBus_Voltage_OutBus_Voltage
+
+void Rte_IWrite_Runnable_Step_OutBus_Voltage_OutBus_Voltage(Double u);
+
+#define Rte_IWriteRef_Runnable_Step_OutBus_Voltage_OutBus_Voltage Rte_IWriteRef_test_Runnable_Step_OutBus_Voltage_OutBus_Voltage
+
+Double* Rte_IWriteRef_Runnable_Step_OutBus_Voltage_OutBus_Voltage(void);
+
+#define Rte_IWrite_Runnable_Step_OutCmdCloseCHG_OutCmdCloseCHG Rte_IWrite_test_Runnable_Step_OutCmdCloseCHG_OutCmdCloseCHG
+
+void Rte_IWrite_Runnable_Step_OutCmdCloseCHG_OutCmdCloseCHG(Double u);
+
+#define Rte_IWriteRef_Runnable_Step_OutCmdCloseCHG_OutCmdCloseCHG Rte_IWriteRef_test_Runnable_Step_OutCmdCloseCHG_OutCmdCloseCHG
+
+Double* Rte_IWriteRef_Runnable_Step_OutCmdCloseCHG_OutCmdCloseCHG(void);
+
+#define Rte_IWrite_Runnable_Step_OutCmdOpenCHG_OutCmdOpenCHG Rte_IWrite_test_Runnable_Step_OutCmdOpenCHG_OutCmdOpenCHG
+
+void Rte_IWrite_Runnable_Step_OutCmdOpenCHG_OutCmdOpenCHG(Double u);
+
+#define Rte_IWriteRef_Runnable_Step_OutCmdOpenCHG_OutCmdOpenCHG Rte_IWriteRef_test_Runnable_Step_OutCmdOpenCHG_OutCmdOpenCHG
+
+Double* Rte_IWriteRef_Runnable_Step_OutCmdOpenCHG_OutCmdOpenCHG(void);
+
+#define Rte_IWrite_Runnable_Step_OutCmdOpenBalan_OutCmdOpenBalan Rte_IWrite_test_Runnable_Step_OutCmdOpenBalan_OutCmdOpenBalan
+
+void Rte_IWrite_Runnable_Step_OutCmdOpenBalan_OutCmdOpenBalan(Double u);
+
+#define Rte_IWriteRef_Runnable_Step_OutCmdOpenBalan_OutCmdOpenBalan Rte_IWriteRef_test_Runnable_Step_OutCmdOpenBalan_OutCmdOpenBalan
+
+Double* Rte_IWriteRef_Runnable_Step_OutCmdOpenBalan_OutCmdOpenBalan(void);
+
+#define Rte_IWrite_Runnable_Step_OutCmdCloseBalan_OutCmdCloseBalan Rte_IWrite_test_Runnable_Step_OutCmdCloseBalan_OutCmdCloseBalan
+
+void Rte_IWrite_Runnable_Step_OutCmdCloseBalan_OutCmdCloseBalan(Double u);
+
+#define Rte_IWriteRef_Runnable_Step_OutCmdCloseBalan_OutCmdCloseBalan Rte_IWriteRef_test_Runnable_Step_OutCmdCloseBalan_OutCmdCloseBalan
+
+Double* Rte_IWriteRef_Runnable_Step_OutCmdCloseBalan_OutCmdCloseBalan(void);
+
+#define Rte_IWrite_Runnable_Step_OutCmdOpenDSG_OutCmdOpenDSG Rte_IWrite_test_Runnable_Step_OutCmdOpenDSG_OutCmdOpenDSG
+
+void Rte_IWrite_Runnable_Step_OutCmdOpenDSG_OutCmdOpenDSG(Double u);
+
+#define Rte_IWriteRef_Runnable_Step_OutCmdOpenDSG_OutCmdOpenDSG Rte_IWriteRef_test_Runnable_Step_OutCmdOpenDSG_OutCmdOpenDSG
+
+Double* Rte_IWriteRef_Runnable_Step_OutCmdOpenDSG_OutCmdOpenDSG(void);
+
+#define Rte_IWrite_Runnable_Step_OutCmdCloseDSG_OutCmdCloseDSG Rte_IWrite_test_Runnable_Step_OutCmdCloseDSG_OutCmdCloseDSG
+
+void Rte_IWrite_Runnable_Step_OutCmdCloseDSG_OutCmdCloseDSG(Double u);
+
+#define Rte_IWriteRef_Runnable_Step_OutCmdCloseDSG_OutCmdCloseDSG Rte_IWriteRef_test_Runnable_Step_OutCmdCloseDSG_OutCmdCloseDSG
+
+Double* Rte_IWriteRef_Runnable_Step_OutCmdCloseDSG_OutCmdCloseDSG(void);
+
+#define Rte_IWrite_Runnable_Step_Batt_Fault_Batt_Fault Rte_IWrite_test_Runnable_Step_Batt_Fault_Batt_Fault
+
+void Rte_IWrite_Runnable_Step_Batt_Fault_Batt_Fault(Double u);
+
+#define Rte_IWriteRef_Runnable_Step_Batt_Fault_Batt_Fault Rte_IWriteRef_test_Runnable_Step_Batt_Fault_Batt_Fault
+
+Double* Rte_IWriteRef_Runnable_Step_Batt_Fault_Batt_Fault(void);
+
+/* Entry point functions */
+extern FUNC(void, test_CODE) Runnable_Init(void);
+extern FUNC(void, test_CODE) Runnable_Step(void);
+
+#endif

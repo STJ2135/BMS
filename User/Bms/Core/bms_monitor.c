@@ -184,16 +184,12 @@ static void BMS_MonitorSysMode(void)
 		
 		if (StandbyCount >= BMS_ENTRY_SLEEP_TIME * 60000)
 		{
-			// 没有电芯正在均衡的情况下才进入睡眠
-			if (rt_sem_take(BalanceSem, RT_WAITING_NO) == RT_EOK)
+			if (BMS_EnergyData.BalanceReleaseFlag != true)
 			{
 				// 可以加睡眠低功耗处理逻辑
 				
 				StandbyCount = 0;
-				
-				BMS_GlobalParam.SysMode = BMS_MODE_SLEEP;
-
-				rt_sem_release(BalanceSem);
+				BMS_GlobalParam.SysMode = BMS_MODE_SLEEP;;
 				
 				LOG_I("Entry Sleep Mode");
 			}

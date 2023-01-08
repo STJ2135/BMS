@@ -178,7 +178,7 @@ static void CAN_SendTaskEntry(void *paramter)
 			// 将上一次未发送的消息重新发出
 			if (HAL_CAN_AddTxMessage(&hcan, &msg.header, msg.buffer, &TxMailbox) != HAL_OK)
 			{
-				LOG_E("retry send fail,please inc delay time");
+				//LOG_E("retry send fail,errcode = %d", hcan.ErrorCode);
 			}
 		}
 	}
@@ -208,10 +208,6 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
 		LOG_E("can send mq error");
 	}
 }
-
-
-
-
 
 
 
@@ -276,7 +272,11 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
        	}
     }
 }
+
 */
+
+
+
 
 
 

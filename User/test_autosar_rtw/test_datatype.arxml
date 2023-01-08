@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Auto generated XML Component Description for model test
+Model version                : 1.4
+Simulink Coder version       : Simulink Coder 8.14 (R2018a) 06-Feb-2018
+XML source code generated on : Tue Jan 03 09:35:54 2023
+Model Checksum               : 1231872000 3179582144 2788508911 1621244220
+-->
+<AUTOSAR xmlns="http://autosar.org/schema/r4.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://autosar.org/schema/r4.0 AUTOSAR_4-3-0.xsd">
+    <AR-PACKAGES>
+        <AR-PACKAGE UUID="5be734b3-17d9-5141-2cb5-eefb02ebb4c2">
+            <SHORT-NAME>test_pkg</SHORT-NAME>
+            <AR-PACKAGES>
+                <AR-PACKAGE UUID="21af8a3e-fa5f-570b-0ef9-c1791b6077e7">
+                    <SHORT-NAME>test_dt</SHORT-NAME>
+                    <ELEMENTS>
+                        <IMPLEMENTATION-DATA-TYPE UUID="ad15e940-69f1-5b7a-214c-116d171990cf">
+                            <SHORT-NAME>Double</SHORT-NAME>
+                            <CATEGORY>VALUE</CATEGORY>
+                            <SW-DATA-DEF-PROPS>
+                                <SW-DATA-DEF-PROPS-VARIANTS>
+                                    <SW-DATA-DEF-PROPS-CONDITIONAL>
+                                        <BASE-TYPE-REF DEST="SW-BASE-TYPE">/test_pkg/test_dt/SwBaseTypes/float64</BASE-TYPE-REF>
+                                    </SW-DATA-DEF-PROPS-CONDITIONAL>
+                                </SW-DATA-DEF-PROPS-VARIANTS>
+                            </SW-DATA-DEF-PROPS>
+                        </IMPLEMENTATION-DATA-TYPE>
+                    </ELEMENTS>
+                    <AR-PACKAGES>
+                        <AR-PACKAGE UUID="20b7b745-e024-52b6-b9b6-ce78b2237eb9">
+                            <SHORT-NAME>SwBaseTypes</SHORT-NAME>
+                            <ELEMENTS>
+                                <SW-BASE-TYPE UUID="3a8fca31-9ddc-5d3c-95a3-8cf2a56d29e3">
+                                    <SHORT-NAME>float64</SHORT-NAME>
+                                    <CATEGORY>FIXED_LENGTH</CATEGORY>
+                                    <BASE-TYPE-SIZE>64</BASE-TYPE-SIZE>
+                                    <BASE-TYPE-ENCODING>IEEE754</BASE-TYPE-ENCODING>
+                                    <NATIVE-DECLARATION>float64</NATIVE-DECLARATION>
+                                </SW-BASE-TYPE>
+                            </ELEMENTS>
+                        </AR-PACKAGE>
+                    </AR-PACKAGES>
+                </AR-PACKAGE>
+                <AR-PACKAGE UUID="41372c9c-4332-535d-d196-594d703c417b">
+                    <SHORT-NAME>test_imp</SHORT-NAME>
+                </AR-PACKAGE>
+            </AR-PACKAGES>
+        </AR-PACKAGE>
+    </AR-PACKAGES>
+</AUTOSAR>

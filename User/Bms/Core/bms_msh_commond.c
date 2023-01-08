@@ -79,7 +79,6 @@ MSH_CMD_EXPORT(BMS_CmdOpenBalance, Open Balance);
 
 static void BMS_CmdCloseBalance(void)
 {
-	rt_sem_release(BalanceSem);
 	BMS_GlobalParam.Balance = BMS_STATE_DISABLE;
 }
 MSH_CMD_EXPORT(BMS_CmdCloseBalance, Close Balance);

@@ -1,0 +1,123 @@
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<title>RTW Report - test.h</title>
+<link rel="stylesheet" type="text/css" href="rtwreport.css"></link><script language="JavaScript" type="text/javascript" src="rtwreport_utils.js"></script>
+<SCRIPT type="text/javascript" language="JavaScript" src="slwebview.js"></SCRIPT>
+<SCRIPT type="text/javascript" language="JavaScript" src="id_mapping.js"></SCRIPT>
+<SCRIPT type="text/javascript" src="rtwannotate.js"></SCRIPT>
+</head>
+<body bgcolor="#eeeeee" onload="try {if (top) { if (top.rtwFileOnLoad) top.rtwFileOnLoad(window.document); else local_onload();}} catch(err) {};if (typeof rtwannotate === 'function') {rtwannotate('test_h_cov.xml');}">
+<p>
+<table border="0" cellspacing="0" cellpadding="6" width="100%%" height="100%%"><tr><td width="100%%" valign="top" bgcolor="#ffffff">
+<h4>File: <a href="../test.h" target="rtwreport_document_frame" id="linkToText_plain">test.h</a></h4>
+<pre id="RTWcode">
+<span><a class="LN" name="1">    1   </a><span class="CT">/*</span>
+</span><span><a class="LN" name="2">    2   </a><span class="CT"> * File: test.h</span>
+</span><span><a class="LN" name="3">    3   </a><span class="CT"> *</span>
+</span><span><a class="LN" name="4">    4   </a><span class="CT"> * Code generated for Simulink model 'test'.</span>
+</span><span><a class="LN" name="5">    5   </a><span class="CT"> *</span>
+</span><span><a class="LN" name="6">    6   </a><span class="CT"> * Model version                  : 1.2</span>
+</span><span><a class="LN" name="7">    7   </a><span class="CT"> * Simulink Coder version         : 8.14 (R2018a) 06-Feb-2018</span>
+</span><span><a class="LN" name="8">    8   </a><span class="CT"> * C/C++ source code generated on : Tue Jan  3 09:34:37 2023</span>
+</span><span><a class="LN" name="9">    9   </a><span class="CT"> *</span>
+</span><span><a class="LN" name="10">   10   </a><span class="CT"> * Target selection: autosar.tlc</span>
+</span><span><a class="LN" name="11">   11   </a><span class="CT"> * Embedded hardware selection: STMicroelectronics-&gt;ST10/Super10</span>
+</span><span><a class="LN" name="12">   12   </a><span class="CT"> * Code generation objectives:</span>
+</span><span><a class="LN" name="13">   13   </a><span class="CT"> *    1. Execution efficiency</span>
+</span><span><a class="LN" name="14">   14   </a><span class="CT"> *    2. RAM efficiency</span>
+</span><span><a class="LN" name="15">   15   </a><span class="CT"> * Validation result: Not run</span>
+</span><span><a class="LN" name="16">   16   </a><span class="CT"> */</span>
+</span><span><a class="LN" name="17">   17   </a>
+</span><span><a class="LN" name="18">   18   </a><font color="#992211">#</font><span class="PP">ifndef</span> RTW_HEADER_test_h_
+</span><span><a class="LN" name="19">   19   </a><font color="#992211">#</font><span class="PP">define</span> RTW_HEADER_test_h_
+</span><span><a class="LN" name="20">   20   </a><font color="#992211">#</font><span class="PP">include</span> <font color="#992211">&lt;math.h&gt;</font>
+</span><span><a class="LN" name="21">   21   </a><font color="#992211">#</font><span class="PP">ifndef</span> test_COMMON_INCLUDES_
+</span><span><a class="LN" name="22">   22   </a><font color="#992211">#</font> <span class="PP">define</span> test_COMMON_INCLUDES_
+</span><span><a class="LN" name="23">   23   </a><font color="#992211">#</font><span class="PP">include</span> <font color="#992211">&quot;rtwtypes.h&quot;</font>
+</span><span><a class="LN" name="24">   24   </a><font color="#992211">#</font><span class="PP">include</span> <font color="#992211">&quot;Rte_test.h&quot;</font>
+</span><span><a class="LN" name="25">   25   </a><font color="#992211">#</font><span class="PP">endif</span>                                 <span class="CT">/* test_COMMON_INCLUDES_ */</span>
+</span><span><a class="LN" name="26">   26   </a>
+</span><span><a class="LN" name="27">   27   </a><span class="CT">/* Macros for accessing real-time model data structure */</span>
+</span><span><a class="LN" name="28">   28   </a>
+</span><span><a class="LN" name="29">   29   </a><span class="CT">/* Block signals and states (default storage) for system '<a href="matlab:coder.internal.code2model('test')" name="code2model"><font color="#117755"><i>&lt;Root&gt;</i></font></a>' */</span>
+</span><span><a class="LN" name="30">   30   </a><span class="KW">typedef</span> <span class="KW">struct</span> tag_DW <b>{</b>
+</span><span><a class="LN" name="31">   31   </a>  <a href="rtwtypes_h.html#type_real_T" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_real_T');" target="_self"><font color="#1122aa">real_T</font></a> Output1;                      <span class="CT">/* '<a href="matlab:coder.internal.code2model('test:132')" name="code2model"><font color="#117755"><i>&lt;S10&gt;/count</i></font></a>' */</span>
+</span><span><a class="LN" name="32">   32   </a>  <a href="rtwtypes_h.html#type_real_T" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_real_T');" target="_self"><font color="#1122aa">real_T</font></a> Delay_DSTATE;                 <span class="CT">/* '<a href="matlab:coder.internal.code2model('test:44')" name="code2model"><font color="#117755"><i>&lt;S4&gt;/Delay</i></font></a>' */</span>
+</span><span><a class="LN" name="33">   33   </a>  <a href="rtwtypes_h.html#type_real_T" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_real_T');" target="_self"><font color="#1122aa">real_T</font></a> Delay_DSTATE_m;               <span class="CT">/* '<a href="matlab:coder.internal.code2model('test:18')" name="code2model"><font color="#117755"><i>&lt;S1&gt;/Delay</i></font></a>' */</span>
+</span><span><a class="LN" name="34">   34   </a>  <a href="rtwtypes_h.html#type_real_T" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_real_T');" target="_self"><font color="#1122aa">real_T</font></a> Delay_DSTATE_b;               <span class="CT">/* '<a href="matlab:coder.internal.code2model('test:124')" name="code2model"><font color="#117755"><i>&lt;S10&gt;/Delay</i></font></a>' */</span>
+</span><span><a class="LN" name="35">   35   </a>  <a href="rtwtypes_h.html#type_real_T" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_real_T');" target="_self"><font color="#1122aa">real_T</font></a> Delay_DSTATE_mm;              <span class="CT">/* '<a href="matlab:coder.internal.code2model('test:37')" name="code2model"><font color="#117755"><i>&lt;S3&gt;/Delay</i></font></a>' */</span>
+</span><span><a class="LN" name="36">   36   </a>  <a href="rtwtypes_h.html#type_real_T" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_real_T');" target="_self"><font color="#1122aa">real_T</font></a> Delay1_DSTATE;                <span class="CT">/* '<a href="matlab:coder.internal.code2model('test:125')" name="code2model"><font color="#117755"><i>&lt;S10&gt;/Delay1</i></font></a>' */</span>
+</span><span><a class="LN" name="37">   37   </a>  <a href="rtwtypes_h.html#type_uint8_T" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_uint8_T');" target="_self"><font color="#1122aa">uint8_T</font></a> icLoad;                      <span class="CT">/* '<a href="matlab:coder.internal.code2model('test:44')" name="code2model"><font color="#117755"><i>&lt;S4&gt;/Delay</i></font></a>' */</span>
+</span><span><a class="LN" name="38">   38   </a>  <a href="rtwtypes_h.html#type_uint8_T" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_uint8_T');" target="_self"><font color="#1122aa">uint8_T</font></a> icLoad_o;                    <span class="CT">/* '<a href="matlab:coder.internal.code2model('test:18')" name="code2model"><font color="#117755"><i>&lt;S1&gt;/Delay</i></font></a>' */</span>
+</span><span><a class="LN" name="39">   39   </a>  <a href="rtwtypes_h.html#type_uint8_T" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_uint8_T');" target="_self"><font color="#1122aa">uint8_T</font></a> icLoad_j;                    <span class="CT">/* '<a href="matlab:coder.internal.code2model('test:37')" name="code2model"><font color="#117755"><i>&lt;S3&gt;/Delay</i></font></a>' */</span>
+</span><span><a class="LN" name="40">   40   </a><b>}</b> <a name="type_DW">DW</a>;
+</span><span><a class="LN" name="41">   41   </a>
+</span><span><a class="LN" name="42">   42   </a><span class="CT">/* Constant parameters (default storage) */</span>
+</span><span><a class="LN" name="43">   43   </a><span class="KW">typedef</span> <span class="KW">struct</span> <b>{</b>
+</span><span><a class="LN" name="44">   44   </a>  <span class="CT">/* Expression: [0,0.014249,0.045337,0.25259,0.48057,0.72668,0.89508,0.9728,1]</span>
+</span><span><a class="LN" name="45">   45   </a><span class="CT">   * Referenced by: '<a href="matlab:coder.internal.code2model('test:49')" name="code2model"><font color="#117755"><i>&lt;Root&gt;/Lookup Table</i></font></a>'</span>
+</span><span><a class="LN" name="46">   46   </a><span class="CT">   */</span>
+</span><span><a class="LN" name="47">   47   </a>  <a href="rtwtypes_h.html#type_real_T" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_real_T');" target="_self"><font color="#1122aa">real_T</font></a> LookupTable_tableData[9];
+</span><span><a class="LN" name="48">   48   </a>
+</span><span><a class="LN" name="49">   49   </a>  <span class="CT">/* Expression: [3.4,3.42,3.45,3.6,3.75,3.9,4.05,4.2,4.25]</span>
+</span><span><a class="LN" name="50">   50   </a><span class="CT">   * Referenced by: '<a href="matlab:coder.internal.code2model('test:49')" name="code2model"><font color="#117755"><i>&lt;Root&gt;/Lookup Table</i></font></a>'</span>
+</span><span><a class="LN" name="51">   51   </a><span class="CT">   */</span>
+</span><span><a class="LN" name="52">   52   </a>  <a href="rtwtypes_h.html#type_real_T" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_real_T');" target="_self"><font color="#1122aa">real_T</font></a> LookupTable_bp01Data[9];
+</span><span><a class="LN" name="53">   53   </a><b>}</b> <a name="type_ConstP">ConstP</a>;
+</span><span><a class="LN" name="54">   54   </a>
+</span><span><a class="LN" name="55">   55   </a><span class="CT">/* Block signals and states (default storage) */</span>
+</span><span><a class="LN" name="56">   56   </a><span class="DT">extern</span> <a href="#type_DW" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_DW');" target="_self"><font color="#1122aa">DW</font></a> <a href="test_c.html#var_rtDW" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rtDW');" target="_self"><font color="#1122aa">rtDW</font></a>;
+</span><span><a class="LN" name="57">   57   </a>
+</span><span><a class="LN" name="58">   58   </a><span class="CT">/* Constant parameters (default storage) */</span>
+</span><span><a class="LN" name="59">   59   </a><span class="DT">extern</span> <span class="DT">const</span> <a href="#type_ConstP" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'type_ConstP');" target="_self"><font color="#1122aa">ConstP</font></a> <a href="test_data_c.html#var_rtConstP" onclick="if (top) if (top.docHiliteMe) top.docHiliteMe(window, 'var_rtConstP');" target="_self"><font color="#1122aa">rtConstP</font></a>;
+</span><span><a class="LN" name="60">   60   </a>
+</span><span><a class="LN" name="61">   61   </a><span class="CT">/*-</span>
+</span><span><a class="LN" name="62">   62   </a><span class="CT"> * The generated code includes comments that allow you to trace directly</span>
+</span><span><a class="LN" name="63">   63   </a><span class="CT"> * back to the appropriate location in the model.  The basic format</span>
+</span><span><a class="LN" name="64">   64   </a><span class="CT"> * is &lt;system&gt;/block_name, where system is the system number (uniquely</span>
+</span><span><a class="LN" name="65">   65   </a><span class="CT"> * assigned by Simulink) and block_name is the name of the block.</span>
+</span><span><a class="LN" name="66">   66   </a><span class="CT"> *</span>
+</span><span><a class="LN" name="67">   67   </a><span class="CT"> * Use the MATLAB hilite_system command to trace the generated code back</span>
+</span><span><a class="LN" name="68">   68   </a><span class="CT"> * to the model.  For example,</span>
+</span><span><a class="LN" name="69">   69   </a><span class="CT"> *</span>
+</span><span><a class="LN" name="70">   70   </a><span class="CT"> * hilite_system('&lt;S3&gt;')    - opens system 3</span>
+</span><span><a class="LN" name="71">   71   </a><span class="CT"> * hilite_system('&lt;S3&gt;/Kp') - opens and selects block Kp which resides in S3</span>
+</span><span><a class="LN" name="72">   72   </a><span class="CT"> *</span>
+</span><span><a class="LN" name="73">   73   </a><span class="CT"> * Here is the system hierarchy for this model</span>
+</span><span><a class="LN" name="74">   74   </a><span class="CT"> *</span>
+</span><span><a class="LN" name="75">   75   </a><span class="CT"> * '<a href="matlab:coder.internal.code2model('test')" name="code2model"><font color="#117755"><i>&lt;Root&gt;</i></font></a>' : 'test'</span>
+</span><span><a class="LN" name="76">   76   </a><span class="CT"> * '<a href="matlab:coder.internal.code2model('test:12')" name="code2model"><font color="#117755"><i>&lt;S1&gt;</i></font></a>'   : 'test/Ah_count'</span>
+</span><span><a class="LN" name="77">   77   </a><span class="CT"> * '<a href="matlab:coder.internal.code2model('test:24')" name="code2model"><font color="#117755"><i>&lt;S2&gt;</i></font></a>'   : 'test/Compare To Constant6'</span>
+</span><span><a class="LN" name="78">   78   </a><span class="CT"> * '<a href="matlab:coder.internal.code2model('test:33')" name="code2model"><font color="#117755"><i>&lt;S3&gt;</i></font></a>'   : 'test/LPF'</span>
+</span><span><a class="LN" name="79">   79   </a><span class="CT"> * '<a href="matlab:coder.internal.code2model('test:41')" name="code2model"><font color="#117755"><i>&lt;S4&gt;</i></font></a>'   : 'test/LPF1'</span>
+</span><span><a class="LN" name="80">   80   </a><span class="CT"> * '<a href="matlab:coder.internal.code2model('test:52')" name="code2model"><font color="#117755"><i>&lt;S5&gt;</i></font></a>'   : 'test/Subsystem'</span>
+</span><span><a class="LN" name="81">   81   </a><span class="CT"> * '<a href="matlab:coder.internal.code2model('test:62')" name="code2model"><font color="#117755"><i>&lt;S6&gt;</i></font></a>'   : 'test/Subsystem1'</span>
+</span><span><a class="LN" name="82">   82   </a><span class="CT"> * '<a href="matlab:coder.internal.code2model('test:74')" name="code2model"><font color="#117755"><i>&lt;S7&gt;</i></font></a>'   : 'test/Subsystem2'</span>
+</span><span><a class="LN" name="83">   83   </a><span class="CT"> * '<a href="matlab:coder.internal.code2model('test:86')" name="code2model"><font color="#117755"><i>&lt;S8&gt;</i></font></a>'   : 'test/Subsystem3'</span>
+</span><span><a class="LN" name="84">   84   </a><span class="CT"> * '<a href="matlab:coder.internal.code2model('test:98')" name="code2model"><font color="#117755"><i>&lt;S9&gt;</i></font></a>'   : 'test/Subsystem4'</span>
+</span><span><a class="LN" name="85">   85   </a><span class="CT"> * '<a href="matlab:coder.internal.code2model('test:115')" name="code2model"><font color="#117755"><i>&lt;S10&gt;</i></font></a>'  : 'test/standstill'</span>
+</span><span><a class="LN" name="86">   86   </a><span class="CT"> * '<a href="matlab:coder.internal.code2model('test:64')" name="code2model"><font color="#117755"><i>&lt;S11&gt;</i></font></a>'  : 'test/Subsystem1/Compare To Constant'</span>
+</span><span><a class="LN" name="87">   87   </a><span class="CT"> * '<a href="matlab:coder.internal.code2model('test:65')" name="code2model"><font color="#117755"><i>&lt;S12&gt;</i></font></a>'  : 'test/Subsystem1/Compare To Constant1'</span>
+</span><span><a class="LN" name="88">   88   </a><span class="CT"> * '<a href="matlab:coder.internal.code2model('test:76')" name="code2model"><font color="#117755"><i>&lt;S13&gt;</i></font></a>'  : 'test/Subsystem2/Compare To Constant2'</span>
+</span><span><a class="LN" name="89">   89   </a><span class="CT"> * '<a href="matlab:coder.internal.code2model('test:77')" name="code2model"><font color="#117755"><i>&lt;S14&gt;</i></font></a>'  : 'test/Subsystem2/Compare To Constant3'</span>
+</span><span><a class="LN" name="90">   90   </a><span class="CT"> * '<a href="matlab:coder.internal.code2model('test:88')" name="code2model"><font color="#117755"><i>&lt;S15&gt;</i></font></a>'  : 'test/Subsystem3/Compare To Constant4'</span>
+</span><span><a class="LN" name="91">   91   </a><span class="CT"> * '<a href="matlab:coder.internal.code2model('test:89')" name="code2model"><font color="#117755"><i>&lt;S16&gt;</i></font></a>'  : 'test/Subsystem3/Compare To Constant5'</span>
+</span><span><a class="LN" name="92">   92   </a><span class="CT"> * '<a href="matlab:coder.internal.code2model('test:100')" name="code2model"><font color="#117755"><i>&lt;S17&gt;</i></font></a>'  : 'test/Subsystem4/Compare To Constant'</span>
+</span><span><a class="LN" name="93">   93   </a><span class="CT"> * '<a href="matlab:coder.internal.code2model('test:101')" name="code2model"><font color="#117755"><i>&lt;S18&gt;</i></font></a>'  : 'test/Subsystem4/Compare To Constant1'</span>
+</span><span><a class="LN" name="94">   94   </a><span class="CT"> * '<a href="matlab:coder.internal.code2model('test:118')" name="code2model"><font color="#117755"><i>&lt;S19&gt;</i></font></a>'  : 'test/standstill/Compare To Constant'</span>
+</span><span><a class="LN" name="95">   95   </a><span class="CT"> * '<a href="matlab:coder.internal.code2model('test:132')" name="code2model"><font color="#117755"><i>&lt;S20&gt;</i></font></a>'  : 'test/standstill/count'</span>
+</span><span><a class="LN" name="96">   96   </a><span class="CT"> */</span>
+</span><span><a class="LN" name="97">   97   </a><font color="#992211">#</font><span class="PP">endif</span>                                 <span class="CT">/* RTW_HEADER_test_h_ */</span>
+</span><span><a class="LN" name="98">   98   </a>
+</span><span><a class="LN" name="99">   99   </a><span class="CT">/*</span>
+</span><span><a class="LN" name="100">  100   </a><span class="CT"> * File trailer for generated code.</span>
+</span><span><a class="LN" name="101">  101   </a><span class="CT"> *</span>
+</span><span><a class="LN" name="102">  102   </a><span class="CT"> * [EOF]</span>
+</span><span><a class="LN" name="103">  103   </a><span class="CT"> */</span>
+</span><span><a class="LN" name="104">  104   </a>
+</span></pre>
+</td></tr></table>
+</p>
+</body>
+</html>

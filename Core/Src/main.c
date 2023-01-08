@@ -31,6 +31,7 @@
 
 #include "bms_app.h"
 
+
 #define DBG_TAG "main"
 #define DBG_LVL DBG_LOG
 #include "rtdbg.h"
@@ -105,7 +106,7 @@ int main(void)
   //Board_Initialize();
 
   BMS_SysInitialize();
-  
+
   /* USER CODE END 2 */
 
   /* Infinite loop */

@@ -49,32 +49,37 @@ typedef struct
 // 报警枚举体
 typedef enum
 {
-	FlAG_ALERT_NO	= 0x0000,	// 无报警触发
-	FlAG_ALERT_OV	= 0X0001,	// 充电过压保护触发位
-	FlAG_ALERT_UV	= 0X0002,	// 放电欠压保护触发位
-	FlAG_ALERT_OCC	= 0X0004,	// 充电过流保护触发位
-	FlAG_ALERT_OCD	= 0X0008,	// 放电过流保护触发位
-	FlAG_ALERT_SCD	= 0X0010,	// 放电短路保护触发位
-	FlAG_ALERT_OTC	= 0X0020,	// 充电过温保护触发位
-	FlAG_ALERT_OTD	= 0X0040,	// 放电过温保护触发位
-	FlAG_ALERT_LTC	= 0X0080,	// 充电低温保护触发位
-	FlAG_ALERT_LTD	= 0X0100,	// 放电低温保护触发位
+	FlAG_ALERT_NO	= 0x0000,		// 无报警触发
+	
+	FlAG_ALERT_OV	= 0X0001,		// 充电过压保护触发位				硬件触发
+	FlAG_ALERT_OCC	= 0X0002,		// 充电过流保护触发位				软件触发
+	FlAG_ALERT_OTC	= 0X0004,		// 充电过温保护触发位				软件触发
+	FlAG_ALERT_LTC	= 0X0008,		// 充电低温保护触发位				软件触发
+
+	FLAG_ALERT_CHG_MASK = 0x000F,	// 充电报警掩码
+	
+	FlAG_ALERT_UV	= 0X0010,		// 放电欠压保护触发位				硬件触发
+	FlAG_ALERT_OCD	= 0X0020,		// 放电过流保护触发位				硬件触发
+	FlAG_ALERT_SCD	= 0X0040,		// 放电短路保护触发位				硬件触发
+	FlAG_ALERT_OTD	= 0X0080,		// 放电过温保护触发位				软件触发
+	FlAG_ALERT_LTD	= 0X0100,		// 放电低温保护触发位				软件触发
+
+	FLAG_ALERT_DSG_MASK = 0x01F0,	// 放电报警掩码
 }BMS_ProtectAlertTypedef;
 
 
 
-// 保护任务状态
-typedef enum
+
+// 跟保护相关的参数结构体
+typedef struct
 {
-	PROTECT_STATE_MONITOR,		// 监控状态
-	PROTECT_STATE_RELIEVE_WAIT,	// 等待或监控恢复条件
-	PROTECT_STATE_RELIEVE,		// 执行恢复
-}BMS_ProtectStateTypedef;
+	BMS_ProtectParamTypedef param;
+	BMS_ProtectAlertTypedef alert;
+}BMS_ProtectTypedef;
 
 
+extern BMS_ProtectTypedef BMS_Protect;
 
-extern BMS_ProtectParamTypedef BMS_ProtectParam;
-extern BMS_ProtectAlertTypedef BMS_ProtectAlert;
 
 
 void BMS_ProtectInit(void);

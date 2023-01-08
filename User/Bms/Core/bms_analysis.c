@@ -324,11 +324,11 @@ static void BMS_AnalysisAHSocCalculate(void)
 	
 	if (BMS_GlobalParam.SysMode == BMS_MODE_STANDBY)
 	{
-		if (BMS_MonitorData.CellData[0].CellVoltage >= BMS_ProtectParam.OVProtect)
+		if (BMS_MonitorData.CellData[0].CellVoltage >= BMS_Protect.param.OVProtect)
 		{
 			BMS_AnalysisData.SOC = 1;
 		}
-		else if (BMS_MonitorData.CellData[0].CellVoltage <= BMS_ProtectParam.UVProtect)
+		else if (BMS_MonitorData.CellData[0].CellVoltage <= BMS_Protect.param.UVProtect)
 		{
 			BMS_AnalysisData.SOC = 0;
 		}

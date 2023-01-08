@@ -211,7 +211,7 @@ static void BMS_InfoPrintf(void)
 
 	// Battery Current
 	sprintf(str, "Battery Current = %0.3fA", BMS_MonitorData.BatteryCurrent);
-	LOG_D("%s", str);	
+	LOG_D("%s", str);
 
 
 

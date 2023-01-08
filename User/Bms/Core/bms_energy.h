@@ -18,11 +18,10 @@ typedef struct
 	float BalanceDiffeVoltage;	// 均衡差异电压(V)
 	uint32_t BalanceCycleTime;	// 均衡周期时间(s)
 	BMS_CellIndexTypedef BalanceRecord;	// 均衡记录,正在均衡的会被位与上
-	
+	bool BalanceReleaseFlag;			// 表示均衡释放,false:表示已不满足均衡条件,true:满足均衡条件
 }BMS_EnergyDataTypedef;
 
 
-extern rt_sem_t BalanceSem;
 extern BMS_EnergyDataTypedef BMS_EnergyData;
 
 

@@ -79,7 +79,7 @@
 
 #define INIT_BALANCE_CURRENT_MAX	0.6		// 最大均衡电流(A),暂未使用,预留
 #define	INIT_OCC_MAX				2.2		// 最大充电电流(A)
-#define	INIT_OCD_MAX				2.2		// 最大放电电流(A),由BQ芯片控制,此参数改动不起作用,应该在drv_softi2c_bq769x0.c修改方电过流
+#define	INIT_OCD_MAX				2.2		// 最大放电电流(A),由BQ芯片控制,此参数改动不起作用,应该在drv_softi2c_bq769x0.c修改放电过流
 
 
 #define INIT_OV_DELAY		BMS_OV_DELAY_2s		// 充电过压保护延时时间	OV:Over	Voltage
@@ -115,9 +115,9 @@
 
 
 #define SOC_STOP_CHG_VALUE		1		// 停止充电SOC值
-#define SOC_START_CHG_VALUE		0.99	// 启动充电SOC值
+#define SOC_START_CHG_VALUE		0.90	// 启动充电SOC值
 #define SOC_STOP_DSG_VALUE		0		// 停止放电SOC值
-#define SOC_START_DSG_VALUE		0.01	// 启动放电SOC值
+#define SOC_START_DSG_VALUE		0.10	// 启动放电SOC值
 
 #define BALANCE_DIFFE_VOLTAGE	0.05	// 均衡差异电压(V)
 #define BALANCE_CYCLE_TIME		30		// 均衡周期时间(s)
