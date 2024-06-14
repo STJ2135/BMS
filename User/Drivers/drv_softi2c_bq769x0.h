@@ -1,3 +1,21 @@
+/*
+ * Copyright (C) 2021-2099 PLKJ Development Team
+ *
+ * SPDX-License-Identifier: CC BY-NC 4.0
+ *
+ * http://creativecommons.org/licenses/by-nc/4.0/
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * 
+ * Change Logs:
+ * Date           Author            Notes
+ *									(3)utils增加了二分查找算法用于开路SOC计算
+ *									(2)修改了开路电压计算函数使之过程更清晰
+ */
 #ifndef __DRV_SOFTI2C_BQ769X0_H__
 #define __DRV_SOFTI2C_BQ769X0_H__
 

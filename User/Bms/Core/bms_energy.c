@@ -1,3 +1,16 @@
+/*
+ * Copyright (C) 2021-2099 PLKJ Development Team
+ *
+ * SPDX-License-Identifier: CC BY-NC 4.0
+ *
+ * http://creativecommons.org/licenses/by-nc/4.0/
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 #include <stdio.h>
 #include <stdbool.h>
 
@@ -258,7 +271,6 @@ static void BMS_BalanceStartTimer(uint32_t sec)
 // 均衡启动条件检查
 static bool BMS_EnergyBalanceCheck(void)
 {
-
 	// 上一轮均衡时间等待还未结束
 	if (BalanceVoltRiseTime >= rt_tick_get())
 	{
@@ -270,8 +282,6 @@ static bool BMS_EnergyBalanceCheck(void)
 	{
 		return false;
 	}
-
-
 
 	// 未使能均衡
 	if (BMS_GlobalParam.Balance != BMS_STATE_ENABLE)

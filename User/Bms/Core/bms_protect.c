@@ -1,3 +1,16 @@
+/*
+ * Copyright (C) 2021-2099 PLKJ Development Team
+ *
+ * SPDX-License-Identifier: CC BY-NC 4.0
+ *
+ * http://creativecommons.org/licenses/by-nc/4.0/
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 #include <stdio.h>
 #include <stdbool.h>
 #include <rtthread.h>
@@ -14,8 +27,6 @@
 #define DBG_LVL DBG_LOG
 #include "rtdbg.h"
 
-
-
 // thread config
 #define PROTECT_TASK_STACK_SIZE	256
 #define PROTECT_TASK_PRIORITY	20
@@ -23,8 +34,6 @@
 
 #define PROTECT_TASK_PERIOD		200
  
-
-
 
 BMS_ProtectTypedef BMS_Protect = 
 {
@@ -128,7 +137,7 @@ static void BMS_ChargeMonitor(void)
 	{
 		// 过流
 		ProtectCount += PROTECT_TASK_PERIOD;
-		if (ProtectCount / 60 >= BMS_Protect.param.OCCDelay)
+		if (ProtectCount / 1000 >= BMS_Protect.param.OCCDelay)
 		{			
 			BMS_HalCtrlCharge(BMS_STATE_DISABLE);
 			BMS_Protect.alert = FlAG_ALERT_OCC;
@@ -191,7 +200,7 @@ static void BMS_DischargeMonitor(void)
 }
 
 
-// 保护触发监控（这是软件触发，有一些是由硬件触发中断）
+// 保护触发监控（这是软件触发，有一些保护是由硬件中断触发）
 static void BMS_ProtectTiggerMonitor(void)
 {
 	switch(BMS_GlobalParam.SysMode)

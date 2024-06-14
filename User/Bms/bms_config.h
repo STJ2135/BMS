@@ -1,3 +1,16 @@
+/*
+ * Copyright (C) 2021-2099 PLKJ Development Team
+ *
+ * SPDX-License-Identifier: CC BY-NC 4.0
+ *
+ * http://creativecommons.org/licenses/by-nc/4.0/
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 #ifndef __BMS_CONFIG_H__
 #define __BMS_CONFIG_H__
 
@@ -29,7 +42,7 @@
 // 当测量出来的温度值上面这个范围时,用这个无效值来代替
 #define BMS_TEMP_INVALID_VALUE	255
 
-// 默认电池额定容量值(A/H)
+// 默认电池额定容量值(Ah)
 // 这个值没有实际用容量测仪校准过,是卖家口头说的
 #define BMS_BATTERY_CAPACITY	2.2
 

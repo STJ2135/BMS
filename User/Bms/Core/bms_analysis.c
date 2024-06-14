@@ -1,3 +1,16 @@
+/*
+ * Copyright (C) 2021-2099 PLKJ Development Team
+ *
+ * SPDX-License-Identifier: CC BY-NC 4.0
+ *
+ * http://creativecommons.org/licenses/by-nc/4.0/
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 #include <stdio.h>
 #include <stdlib.h>
 #include <rtthread.h>
@@ -318,7 +331,7 @@ static void BMS_AnalysisOcvSocCalculate(void)
 // soc = 实时积分的容量 / 电池包实际容量
 static void BMS_AnalysisAHSocCalculate(void)
 {
-	// abs取绝对值，除3600把 A/S 单位换算成  A/H
+	// abs取绝对值，除3600把 mAS 单位换算成  mAh
 	float CurrentValue = abs((int32_t)(BMS_MonitorData.BatteryCurrent * 1000)) / 1000.0 / 3600;
 
 	
@@ -358,7 +371,7 @@ static void BMS_AnalysisAHSocCalculate(void)
 	}
 
 	/*
-	else  // 是否考虑静态时的漏电电流10MA
+	else  // 是否考虑静态时的漏电电流10mA
 	{
 		if(BMS_AnalysisData.CapacityRemain >= 0.01)   
 		{
