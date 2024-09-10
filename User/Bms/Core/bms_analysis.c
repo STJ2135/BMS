@@ -258,7 +258,7 @@ static uint16_t BMS_AnalysisOcvToSoc(uint16_t voltage)
 		else
 		{
 			// (index - 1) * 10计算整数位，后面一坨计算小数点
-			soc = (index - 1) * 10 + ((SocOcvTab[index] - voltage) * 10) / ((SocOcvTab[index] - SocOcvTab[index - 1]));			
+			soc = (index - 1) * 10 + ((voltage - SocOcvTab[index - 1]) * 10) / ((SocOcvTab[index] - SocOcvTab[index - 1]));			
 		}
 	}
 	
