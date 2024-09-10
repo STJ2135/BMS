@@ -173,6 +173,7 @@ static void BMS_MonitorBattery(void)
 // BatteryCurrent < 20mA || BatteryCurrent > -20mA  处于待机模式或者睡眠模式
 // BatteryCurrent <= -20mA 处于放电模式
 // BatteryCurrent >=  20mA 处于充电模式
+// 20mA这个值根据最终硬件实测决定，测量电池未充放情况下系统静态功耗最大，不然会误触发进入模式
 static void BMS_MonitorSysMode(void)
 {
 	static BMS_SysModeTypedef SysModeBackup = BMS_MODE_NULL;

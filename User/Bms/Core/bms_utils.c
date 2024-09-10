@@ -13,7 +13,6 @@
  */
 #include "bms_utils.h"
 
-
 // 查找一个数是否存在数组中
 int binarySearch(uint16_t *nums, uint8_t left, uint8_t right, uint16_t target)  
 {
@@ -21,7 +20,7 @@ int binarySearch(uint16_t *nums, uint8_t left, uint8_t right, uint16_t target)
 	{ 
 		// 注意
         int mid = (right + left) / 2;
-			
+
         if(nums[mid] == target)
 		{
             return mid; 
@@ -35,51 +34,54 @@ int binarySearch(uint16_t *nums, uint8_t left, uint8_t right, uint16_t target)
             right = mid - 1; // 注意
         }
 	}
-    return -1;
-}
 
-// 查找一个数在数组中的右侧边界(二分法)
-// start_pos：起始位置
-// end_pos：结束位置
-// 返回-1：表示不存在这个数
-int right_bound(uint16_t *nums, uint8_t start_pos, uint8_t end_pos, uint16_t target) 
-{
-	uint16_t left = start_pos;
-	uint16_t right = end_pos;
-		
-    while (left < right)
-	{
-        int mid = (left + right) / 2;
-		
-        if (nums[mid] == target) 
-		{
-            left = mid + 1; // 注意
-        } 
-		else if (nums[mid] < target) 
-		{
-            left = mid + 1;
-        }
-		else if (nums[mid] > target) 
-		{
-            right = mid;
-        }
-    }
-	if ((left - 1) < start_pos)
-	{
-		return -1;
-	}
-    return left - 1; // 注意
+    return -1;
 }
 
 // 查找一个数在数组中的左侧边界(二分法)
 // start_pos：起始位置
 // end_pos：结束位置
 // 返回-1：表示不存在这个数
-int left_bound(uint16_t *nums, uint16_t start_pos, uint16_t end_pos, uint16_t target) 
+int left_bound(uint16_t *nums, uint8_t start_pos, uint8_t end_pos, uint16_t target) 
 {
 	uint16_t left = start_pos;
 	uint16_t right = end_pos;
-	
+
+    while (left < right)
+    {
+        int mid = (left + right) / 2;
+
+        if (nums[mid] == target)
+		{
+            left = mid + 1; // 注意
+        } 
+		else if (nums[mid] < target)
+		{
+            left = mid + 1;
+        }
+		else if (nums[mid] > target)
+		{
+            right = mid;
+        }
+    }
+
+	if ((left - 1) < start_pos)
+	{
+		return -1;
+	}
+
+    return left - 1; // 注意
+}
+
+// 查找一个数在数组中的右侧边界(二分法)
+// start_pos：起始位置
+// end_pos：结束位置
+// 返回-1：表示不存在这个数
+int right_bound(uint16_t *nums, uint16_t start_pos, uint16_t end_pos, uint16_t target) 
+{
+	uint16_t left = start_pos;
+	uint16_t right = end_pos;
+
     while (left < right) 
 	{ 
 		// 注意
@@ -99,14 +101,13 @@ int left_bound(uint16_t *nums, uint16_t start_pos, uint16_t end_pos, uint16_t ta
         }
     }
 	
-	if (left > end_pos)
+	if (right > end_pos)
 	{
 		return -1;
 	}
-    return left;
+
+    return right;
 }
-
-
 
 // 冒泡排序float类型
 void BubbleFloat(float a[], uint32_t n)
@@ -148,12 +149,6 @@ void bubble(int a[],int n)
 }
 */
 
-
-
-
-
-
-
 int cmp_int8_t(const void *e1, const void *e2)
 {
     return *(int8_t *)e1 - *(int8_t *)e2;
@@ -181,7 +176,7 @@ int cmp_float(const void *e1, const void *e2)
 		return 1;
 	}
 
-    return 0;    
+    return 0;
 }
 
 int cmp_double(const void *e1, const void *e2)
@@ -193,7 +188,6 @@ int cmp_double(const void *e1, const void *e2)
 
     return 0;
 }
-
 
 // 交换元素,任意类型
 void swap(uint8_t *buf1, uint8_t *buf2, uint32_t width)
@@ -210,7 +204,6 @@ void swap(uint8_t *buf1, uint8_t *buf2, uint32_t width)
         buf2++;
     }
 }
-
 
 // 冒泡排序,任意类型
 // base：	基地址
@@ -235,18 +228,12 @@ void BubbleSort(void *base, uint32_t sz, uint32_t width, int (*cmp)(void *e1, vo
 }
 
 
-
-
-
 /*
 
 下面是任意类型数据冒排序的测试代码
 
-
-
 #define BMS_CELL_MAX	5
 #define BMS_TEMP_MAX	2
-
 
 typedef struct
 {
@@ -261,7 +248,6 @@ typedef struct
 	float BatteryCurrent;							// 电池组电流
 	BMS_CellDataTypedef CellData[BMS_CELL_MAX]; 	// 电芯电压,电压数据会从小到大排序
 }BMS_SampleDataTypedef;
-
 
 int cmp1(void *e1, void *e2)
 {
@@ -278,7 +264,6 @@ int cmp1(void *e1, void *e2)
     return 0;
 }
 
- 
 int main()
 {
 	uint8_t index;

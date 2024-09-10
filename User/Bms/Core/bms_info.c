@@ -140,7 +140,7 @@ static void BMS_InfoPrintf(void)
 
 	LOG_D("/*************************************************************/");
 	
-	// 电池包实时容量
+	// 电池包实际容量
 	sprintf(str, "Battery Real Capacity = %0.3fAh", BMS_AnalysisData.CapacityReal);
 	LOG_D("%s", str);
 

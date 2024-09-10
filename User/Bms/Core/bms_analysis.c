@@ -23,13 +23,9 @@
 #include "bms_utils.h"
 #include "bms_global.h"
 
-
-
 #define DBG_TAG "analysis"
 #define DBG_LVL DBG_LOG
 #include "rtdbg.h"
-
-
 
 // thread config
 #define ANALYSISI_TASK_STACK_SIZE	256
@@ -38,24 +34,13 @@
 
 #define ANALYSISI_TASK_PERIOD		1000
 
-
-
 #define TEMP_CAP_RATE_LIMITH_HIGH   1050
 #define TEMP_CAP_RATE_LIMITL_LOW    750
-
-
-
-
-
-
 
 BMS_AnalysisDataTypedef BMS_AnalysisData =
 {
 	.CapacityRated = BMS_BATTERY_CAPACITY,
 };
-
-
-
 
 // 三元锂电池 SOC 开路电压法计算数据表
 uint16_t SocOcvTab[101]=
@@ -73,9 +58,7 @@ uint16_t SocOcvTab[101]=
 	4067, 4080, 4092, 4105, 4118, 4131, 4145, 4158, 4172, 4185,	// 91~100%
 };
 
-
 static void BMS_AnalysisTaskEntry(void *paramter);
-
 
 static void BMS_AnalysisEasy(void);
 static void BMS_AnalysisCalCap(void);
@@ -83,16 +66,10 @@ static void BMS_AnalysisSocCheck(void);
 static void BMS_AnalysisCapAndSocInit(void);
 
 
-
-
-
-
 // 电池状态分析模块初始化
 void BMS_AnalysisInit(void)
 {
 	rt_thread_t thread;
-
-
 
 	thread = rt_thread_create("analysis",
 							   BMS_AnalysisTaskEntry,
@@ -107,9 +84,7 @@ void BMS_AnalysisInit(void)
 	}
 
 	rt_thread_startup(thread);
-
 }
-
 
 // 电池状态分析任务线程入口
 static void BMS_AnalysisTaskEntry(void *paramter)
@@ -124,7 +99,6 @@ static void BMS_AnalysisTaskEntry(void *paramter)
 	}
 }
 
-
 // 简单分析,通过数据直接进行计算就能得到的
 static void BMS_AnalysisEasy(void)
 {
@@ -133,7 +107,6 @@ static void BMS_AnalysisEasy(void)
 	// 最大电压差
 	BMS_AnalysisData.MaxVoltageDifference = BMS_MonitorData.CellData[BMS_GlobalParam.Cell_Real_Number - 1].CellVoltage - BMS_MonitorData.CellData[0].CellVoltage;
 	
-	
 	// 平均电压
 	for (index = 0, BMS_AnalysisData.AverageVoltage = 0; index < BMS_GlobalParam.Cell_Real_Number; index++)
 	{
@@ -141,19 +114,13 @@ static void BMS_AnalysisEasy(void)
 	}
 	BMS_AnalysisData.AverageVoltage /= BMS_GlobalParam.Cell_Real_Number;
 	
-	
 	// 实时功率
 	BMS_AnalysisData.PowerReal = BMS_MonitorData.BatteryVoltage * BMS_MonitorData.BatteryCurrent;	
-
 
 	// 最大和最小电压
 	BMS_AnalysisData.CellVoltMax = BMS_MonitorData.CellData[BMS_GlobalParam.Cell_Real_Number - 1].CellVoltage;
 	BMS_AnalysisData.CellVoltMin = BMS_MonitorData.CellData[0].CellVoltage;
 }
-
-
-
-
 
 // 温度校准
 // 锂电池充放电时温度的变化会影响充放电时电压与时间的关系,进而影响电池实时容量
@@ -161,8 +128,8 @@ static void BMS_AnalysisTempCal(void)
 {
 	static int16_t LastTemp = 0;
 
-	uint8_t  Ratio; 	// 校准倍率
-	uint16_t RateTemp;	
+	uint8_t  Ratio;     // 校准倍率
+	uint16_t RateTemp;
 	int16_t MinTemp = BMS_MonitorData.CellTemp[0] * 10; // 小数转化成整数,方便计算
 
 
@@ -197,13 +164,11 @@ static void BMS_AnalysisTempCal(void)
 		}
 	}
 
-
 	// 确定每一摄氏度的校准倍率
 	// 该校准倍率的由来是根据不同温度下的放电曲线来的
 	// 放电曲线：http://www.doczj.com/doc/1510977503.html
 	// 上面链接的放电曲线跟这份代码的校准区间的参数有所不同	
 	// 搜了几个三元锂电池的放电温度特性曲线,都是以25度常温为标准,25度时容量不受温度影响
-
 	
 	if (MinTemp >= 250)
 	{
@@ -212,30 +177,29 @@ static void BMS_AnalysisTempCal(void)
 		// 增加的容量为：0.001 * (最小温度-常温)
 		Ratio = 1;
 	}
-	else if (MinTemp >= 100 && MinTemp < 250)   
-	{   
+	else if (MinTemp >= 100 && MinTemp < 250)
+	{
 		// 温度小于25度时,每1度的倍率为0.002
 		// 小于常温放电时间变短,就可以理解为容量减小
 		// 减小的容量为：0.002 * (最小温度-常温)
 		Ratio = 2;
 	}
-	else if (MinTemp >= 0 && MinTemp < 100)      
+	else if (MinTemp >= 0 && MinTemp < 100)
 	{   
 		Ratio = 3;
 	}
-	else if (MinTemp >= -200 && MinTemp < -10)    
+	else if (MinTemp >= -200 && MinTemp < -10)
 	{   
 		Ratio = 4;
 	}
-	else if (MinTemp >= -300 && MinTemp < -200)    
+	else if (MinTemp >= -300 && MinTemp < -200)
 	{   
 		Ratio = 5;
 	}
 	else
 	{
-		Ratio = 6;                                       
+		Ratio = 6;
 	}
-
 
 	// 该公式理解:
 	// 1000：表示为电池容量为100%
@@ -243,7 +207,6 @@ static void BMS_AnalysisTempCal(void)
 	// (MinTemp - 250) / 10:高/低了多少度
 	// RateTemp:计算出来的就是电池衰减/增加百分比
 	RateTemp = 1000 + Ratio * (MinTemp - 250) / 10;
-
 
 	// 做了个上下限
 	// 不能超过105%
@@ -264,14 +227,11 @@ static void BMS_AnalysisTempCal(void)
 	BMS_AnalysisData.CapacityRemain = BMS_AnalysisData.CapacityReal * BMS_AnalysisData.SOC;
 }
 
-
-
 // 实时校准容量涉及因素:温度、完整充放电、老化等等
 static void BMS_AnalysisCalCap(void)
 {	
 	BMS_AnalysisTempCal();
 }
-
 
 // 根据单体电芯最低电压计算出soc值,用于上电和长时间静止状态下的校准
 static uint16_t BMS_AnalysisOcvToSoc(uint16_t voltage)
@@ -297,8 +257,8 @@ static uint16_t BMS_AnalysisOcvToSoc(uint16_t voltage)
 		}
 		else
 		{
-			// 计算百分比后的小数点
-			soc = index * 10 + (( SocOcvTab[index] - voltage) * 10) / (SocOcvTab[index] - SocOcvTab[index + 1]);		
+			// (index - 1) * 10计算整数位，后面一坨计算小数点
+			soc = (index - 1) * 10 + ((SocOcvTab[index] - voltage) * 10) / ((SocOcvTab[index] - SocOcvTab[index - 1]));			
 		}
 	}
 	
@@ -322,7 +282,6 @@ static void BMS_AnalysisOcvSocCalculate(void)
 	}
 }
 
-
 // 安时积分法soc计算
 // 待机模式下判断最低电压值是否大于等于过压保护值,成立则soc = 100%
 // 待机模式下判断最低电压值是否小于等于欠压保护值,成立则soc = 0%
@@ -331,10 +290,9 @@ static void BMS_AnalysisOcvSocCalculate(void)
 // soc = 实时积分的容量 / 电池包实际容量
 static void BMS_AnalysisAHSocCalculate(void)
 {
-	// abs取绝对值，除3600把 mAS 单位换算成  mAh
+	// abs取绝对值，除3600把 AS 单位换算成 Ah
 	float CurrentValue = abs((int32_t)(BMS_MonitorData.BatteryCurrent * 1000)) / 1000.0 / 3600;
 
-	
 	if (BMS_GlobalParam.SysMode == BMS_MODE_STANDBY)
 	{
 		if (BMS_MonitorData.CellData[0].CellVoltage >= BMS_Protect.param.OVProtect)
@@ -398,7 +356,6 @@ static void BMS_AnalysisSocCheck(void)
 	BMS_AnalysisAHSocCalculate();
 }
 
-
 // 容量和SOC上电初始化
 static void BMS_AnalysisCapAndSocInit(void)
 {
@@ -411,4 +368,3 @@ static void BMS_AnalysisCapAndSocInit(void)
 	// 剩余容量 = 实际容量 * soc
 	BMS_AnalysisData.CapacityRemain = BMS_AnalysisData.CapacityReal * BMS_AnalysisData.SOC; 
 }
-

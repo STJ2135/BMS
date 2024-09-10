@@ -52,11 +52,9 @@ void BMS_SysInitialize(void)
 	InitData.ConfigData.UVPThreshold = INIT_UV_PROTECT * 1000;
 	InitData.ConfigData.OVPThreshold = INIT_OV_PROTECT * 1000;
 
-
 	// 硬件初始化
 	I2C_BusInitialize();
 	BQ769X0_Initialize(&InitData);
-
 
 	// 软件初始化
 	BMS_MonitorInit();	// 电池监控初始化

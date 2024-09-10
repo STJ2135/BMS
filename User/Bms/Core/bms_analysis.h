@@ -43,7 +43,7 @@ typedef struct
 	float CellVoltMin;			// 单体电芯最小电压(V)
 	
 	float CapacityRated;		// 电池包额定容量(Ah)
-	float CapacityReal;			// 电池包实时容量(Ah)  		计算方法得进行一次完整的充放电计算
+	float CapacityReal;			// 电池包实际容量(Ah)  		计算方法得进行一次完整的充放电计算
 	float CapacityRemain;		// 电池包剩余容量(Ah)
 }BMS_AnalysisDataTypedef;
 

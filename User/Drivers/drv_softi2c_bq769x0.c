@@ -590,7 +590,7 @@ void BQ769X0_UpdateTsTemp(void)
 
 		// Rts:热敏电阻阻值
 		// 根据adc值算出热敏电阻阻值,单位:Ω
-		Rts = (10000 * v_tsx) / (3.3 - v_tsx);		
+		Rts = (10000 * v_tsx) / (3.3 - v_tsx);
 
 		// 根据电阻值算出对应的温度值
 		BQ769X0_SampleData.TsxTemperature[index] = TempChange(Rts);
@@ -621,7 +621,7 @@ void BQ769X0_UpdateDieTemp(void)
 	
 	adc_value = (Registers.TS1.TS1Byte.TS1_HI << 8) | Registers.TS1.TS1Byte.TS1_LO;
 	BQ769X0_SampleData.DieTemperature =  adc_value * 382.0 / 1000.0;
-	BQ769X0_SampleData.DieTemperature = 25 - ((BQ769X0_SampleData.DieTemperature - 1.2) / 0.0042);
+	BQ769X0_SampleData.DieTemperature = 25 - (((BQ769X0_SampleData.DieTemperature / 1000.0) - 1.2) / 0.0042);
 }
 
 
@@ -937,7 +937,10 @@ void BQ769X0_Initialize(BQ769X0_InitDataTypedef *InitData)
 	Registers.Protect2.Protect2Bit.OCD_DELAY  = InitData->ConfigData.OCDDelay;	
 	Registers.Protect3.Protect3Bit.UV_DELAY   = InitData->ConfigData.UVDelay;	
 	Registers.Protect3.Protect3Bit.OV_DELAY   = InitData->ConfigData.OVDelay;
+
+    // BQ阈值寄存器内部比较是14位的，但我们真实写入的值是“10-XXXX-XXXX–1000”中间x的数据，所以下面计算出14位数据后需要得到中间8位再写入
     Registers.OVTrip = (uint8_t)((((uint16_t)((InitData->ConfigData.OVPThreshold - Adcoffset)/Gain/* + 0.5*/) - OV_THRESH_BASE) >> 4) & 0xFF);
+    // BQ阈值寄存器内部比较是14位的，但我们真实写入的值是“01-XXXX-XXXX–0000”中间x的数据，所以下面计算出14位数据后需要得到中间8位再写入
     Registers.UVTrip = (uint8_t)((((uint16_t)((InitData->ConfigData.UVPThreshold - Adcoffset)/Gain/* + 0.5*/) - UV_THRESH_BASE) >> 4) & 0xFF);
 
 
@@ -948,6 +951,3 @@ void BQ769X0_Initialize(BQ769X0_InitDataTypedef *InitData)
 	
 	LOG_I("BQ769X0 Initialize successful!");
 }
-
-
-

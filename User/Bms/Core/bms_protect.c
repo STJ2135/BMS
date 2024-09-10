@@ -34,7 +34,6 @@
 
 #define PROTECT_TASK_PERIOD		200
  
-
 BMS_ProtectTypedef BMS_Protect = 
 {
 	.alert = FlAG_ALERT_NO,
@@ -73,15 +72,10 @@ BMS_ProtectTypedef BMS_Protect =
 };
 
 
-
 static void BMS_ProtectTaskEntry(void *paramter);
-
 
 static void BMS_ProtectTiggerMonitor(void);
 static void BMS_ProtectRelieveMonitor(void);
-
-
-
 
 // 保护任务的初始化
 void BMS_ProtectInit(void)
@@ -103,7 +97,6 @@ void BMS_ProtectInit(void)
 
 	rt_thread_startup(thread);
 }
-
 
 
 // 保护任务入口
@@ -343,21 +336,10 @@ static void BMS_ProtectRelieveMonitor(void)
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
 // 放电过流(OCD)硬件触发
 void BMS_ProtectHwOCD(void)
 {
-	if ((BMS_Protect.alert & FlAG_ALERT_OCD) == FlAG_ALERT_NO)
+	if ((BMS_Protect.alert & FlAG_ALERT_OCD) == FlAG_ALERT_NO) // 判断是为了防止多次触发
 	{
 		BMS_HalCtrlDischarge(BMS_STATE_DISABLE);
 		BMS_Protect.alert |= FlAG_ALERT_OCD;
@@ -368,7 +350,7 @@ void BMS_ProtectHwOCD(void)
 // 放电短路(SCD)硬件触发
 void BMS_ProtectHwSCD(void)
 {
-	if ((BMS_Protect.alert & FlAG_ALERT_SCD) == FlAG_ALERT_NO)
+	if ((BMS_Protect.alert & FlAG_ALERT_SCD) == FlAG_ALERT_NO) // 判断是为了防止多次触发
 	{
 		BMS_HalCtrlDischarge(BMS_STATE_DISABLE);
 		BMS_Protect.alert |= FlAG_ALERT_SCD;
@@ -379,7 +361,7 @@ void BMS_ProtectHwSCD(void)
 // 充电过压(OV)硬件触发
 void BMS_ProtectHwOV(void)
 {
-	if ((BMS_Protect.alert & FlAG_ALERT_OV) == FlAG_ALERT_NO)
+	if ((BMS_Protect.alert & FlAG_ALERT_OV) == FlAG_ALERT_NO) // 判断是为了防止多次触发
 	{
 		BMS_HalCtrlCharge(BMS_STATE_DISABLE);
 		BMS_Protect.alert |= FlAG_ALERT_OV;
@@ -390,7 +372,7 @@ void BMS_ProtectHwOV(void)
 // 放欠过压(UV)硬件触发
 void BMS_ProtectHwUV(void)
 {
-	if ((BMS_Protect.alert & FlAG_ALERT_UV) == FlAG_ALERT_NO)
+	if ((BMS_Protect.alert & FlAG_ALERT_UV) == FlAG_ALERT_NO) // 判断是为了防止多次触发
 	{
 		BMS_HalCtrlDischarge(BMS_STATE_DISABLE);
 		BMS_Protect.alert |= FlAG_ALERT_UV;
@@ -399,20 +381,12 @@ void BMS_ProtectHwUV(void)
 }
 
 
-
-
-
-
 void BMS_ProtectHwDevice(void)
 {
 	LOG_W("BMS_ProtectHwDevice");
 }
 
-
 void BMS_ProtectHwOvrd(void)
 {
 	LOG_W("BMS_ProtectHwOvrd");
 }
-
-
-
