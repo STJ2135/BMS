@@ -642,7 +642,7 @@ typedef struct
 // BQ硬件报警回调接口
 typedef struct
 {
-	void (*ocd)(void);		// BQ769X0 充电过流硬件报警
+	void (*ocd)(void);		// BQ769X0 放电过流硬件报警
 	void (*scd)(void);		// BQ769X0 放电电路硬件报警
 	void (*ov)(void);		// BQ769X0 充电过压硬件报警
 	void (*uv)(void);		// BQ769X0 放电欠压硬件报警
@@ -693,8 +693,6 @@ typedef enum
 	BQ_CELL_ALL		= 0x7FFF,
 }BQ769X0_CellIndexTypedef;
 
-
-
 typedef struct
 {
 	float CellVoltage[BQ769X0_CELL_MAX];	// 单节电芯电压
@@ -703,8 +701,6 @@ typedef struct
 	float BatteryVoltage;	// 电池包总电压
 	float DieTemperature;	// ic温度,目前还未测试成功
 }BQ769X0_SampleDataTypedef;
-
-
 
 extern BQ769X0_SampleDataTypedef BQ769X0_SampleData;
 
@@ -729,12 +725,4 @@ void BQ769X0_OVDelaySet(BQ769X0_OVDelayTypedef OVDelay);
 void BQ769X0_UVPThresholdSet(uint16_t UVPThreshold);
 void BQ769X0_OVPThresholdSet(uint16_t OVPThreshold);
 
-
-
-
-
-
-
 #endif
-
-

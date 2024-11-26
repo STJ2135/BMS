@@ -198,6 +198,7 @@ static void BMS_AnalysisTempCal(void)
 	}
 	else
 	{
+        // ratio:这个量表示是一个变化趋势，温度越低，温度区间范围越大，也就证明变化趋势越大，所以ratio也在增大
 		Ratio = 6;
 	}
 
@@ -291,6 +292,7 @@ static void BMS_AnalysisOcvSocCalculate(void)
 static void BMS_AnalysisAHSocCalculate(void)
 {
 	// abs取绝对值，除3600把 AS 单位换算成 Ah
+    // 这里为什么要*1000然后再除1000，因为abs只能对整数取绝对值所以要将小数转整数，这里也可以用fabs就不用*1000/1000操作了
 	float CurrentValue = abs((int32_t)(BMS_MonitorData.BatteryCurrent * 1000)) / 1000.0 / 3600;
 
 	if (BMS_GlobalParam.SysMode == BMS_MODE_STANDBY)

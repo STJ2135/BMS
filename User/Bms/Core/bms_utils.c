@@ -42,7 +42,7 @@ int binarySearch(uint16_t *nums, uint8_t left, uint8_t right, uint16_t target)
 // start_pos：起始位置
 // end_pos：结束位置
 // 返回-1：表示不存在这个数
-int left_bound(uint16_t *nums, uint8_t start_pos, uint8_t end_pos, uint16_t target) 
+int left_bound(uint16_t *nums, uint16_t start_pos, uint16_t end_pos, uint16_t target) 
 {
 	uint16_t left = start_pos;
 	uint16_t right = end_pos;

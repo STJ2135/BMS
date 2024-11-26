@@ -94,7 +94,6 @@
 #define	INIT_OCC_MAX				2.2		// 最大充电电流(A)
 #define	INIT_OCD_MAX				2.2		// 最大放电电流(A),由BQ芯片控制,此参数改动不起作用,应该在drv_softi2c_bq769x0.c修改放电过流
 
-
 #define INIT_OV_DELAY		BMS_OV_DELAY_2s		// 充电过压保护延时时间	OV:Over	Voltage
 #define INIT_UV_DELAY 		BMS_UV_DELAY_4s		// 放电欠压保护延时时间 UV:Under Voltage
 

@@ -26,14 +26,9 @@
 #include "drv_soft_i2c.h"
 
 
-
-
 #define DBG_TAG "bq76920"
 #define DBG_LVL DBG_LOG
 #include "rtdbg.h"
-
-
-
 
 // 报警回调接口
 static BQ769X0_AlertOpsTypedef AlertOps;
@@ -45,7 +40,6 @@ static int16_t iGain = 0;
 static int8_t Adcoffset;
 
 static uint8_t TempSampleMode = 0;  // 温度采样模式 0:热敏电阻  1:IC温度
-
 
 
 // 寄存器组
@@ -620,8 +614,8 @@ void BQ769X0_UpdateDieTemp(void)
  	}
 	
 	adc_value = (Registers.TS1.TS1Byte.TS1_HI << 8) | Registers.TS1.TS1Byte.TS1_LO;
-	BQ769X0_SampleData.DieTemperature =  adc_value * 382.0 / 1000.0;
-	BQ769X0_SampleData.DieTemperature = 25 - (((BQ769X0_SampleData.DieTemperature / 1000.0) - 1.2) / 0.0042);
+	BQ769X0_SampleData.DieTemperature =  adc_value * 382.0 / 1000000.0; // /1000000.0换算单位V
+	BQ769X0_SampleData.DieTemperature = 25 - ((BQ769X0_SampleData.DieTemperature - 1.2) / 0.0042);
 }
 
 
@@ -725,21 +719,19 @@ void BQ769X0_GetADCGainOffset(void)
 	BQ769X0_ReadRegisterByteWithCRC(ADCGAIN1, &(Registers.ADCGain1.ADCGain1Byte));
 	BQ769X0_ReadRegisterByteWithCRC(ADCGAIN2, &(Registers.ADCGain2.ADCGain2Byte));
 	BQ769X0_ReadRegisterByteWithCRC(ADCOFFSET, &(Registers.ADCOffset));
-
 	
 	/*GAIN is uV/LSB,OFFSET is mV*/
 	Gain = (ADCGAIN_BASE + ((Registers.ADCGain1.ADCGain1Byte & 0x0C) << 1) + ((Registers.ADCGain2.ADCGain2Byte & 0xE0)>> 5)) / 1000.0;
 	iGain = ADCGAIN_BASE + ((Registers.ADCGain1.ADCGain1Byte & 0x0C) << 1) + ((Registers.ADCGain2.ADCGain2Byte & 0xE0)>> 5);
 
-
-	if (Registers.ADCOffset & 0x80)
-	{
-		Adcoffset = 256 - (int16_t)Registers.ADCOffset * -1;
-	}
-	else
-	{
-		Adcoffset = Registers.ADCOffset;
-	}
+    if (Registers.ADCOffset <= 0x7F) 
+    {
+        Adcoffset = Registers.ADCOffset;    // 正数，直接返回
+    }
+    else
+    {
+        Adcoffset = Registers.ADCOffset - 256;  // 负数，手动处理
+    }
 	
 	//BQ769X0_INFO("Adcoffset = %d, Registers.ADCOffset = %d", Adcoffset, Registers.ADCOffset);
 }
@@ -810,11 +802,14 @@ bool BQ769X0_LoadDetect(void)
 // 唤醒BQ芯片
 void BQ769X0_Wakeup(void)
 {
+    // 输出模式，推挽输出高电平唤醒BQ芯片
     BQ769X0_TS1_SetOutMode();
     HAL_GPIO_WritePin(BQ769X0_TS1_GPIO_Port, BQ769X0_TS1_Pin, GPIO_PIN_SET);
     BQ769X0_DELAY(1000);
+
+    // 设为输入模式，避免干扰温度采样
     HAL_GPIO_WritePin(BQ769X0_TS1_GPIO_Port, BQ769X0_TS1_Pin, GPIO_PIN_RESET);
-    BQ769X0_TS1_SetInMode();  // 设为输入模式，避免干扰温度采样
+    BQ769X0_TS1_SetInMode();
     BQ769X0_DELAY(1000);
 }
 

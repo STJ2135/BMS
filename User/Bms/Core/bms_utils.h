@@ -24,7 +24,7 @@ void BubbleFloat(float a[], uint32_t n);
 
 
 int binarySearch(uint16_t *nums, uint8_t left, uint8_t right, uint16_t target);
-int right_bound(uint16_t *nums, uint8_t start_pos, uint8_t end_pos, uint16_t target);
+int right_bound(uint16_t *nums, uint16_t start_pos, uint16_t end_pos, uint16_t target);
 int left_bound(uint16_t *nums, uint16_t start_pos, uint16_t end_pos, uint16_t target);
 
 int cmp_int8_t(const void *e1, const void *e2);
