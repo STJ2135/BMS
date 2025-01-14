@@ -721,6 +721,7 @@ void BQ769X0_GetADCGainOffset(void)
 	BQ769X0_ReadRegisterByteWithCRC(ADCOFFSET, &(Registers.ADCOffset));
 	
 	/*GAIN is uV/LSB,OFFSET is mV*/
+    /* 下面的位移是因为GAIN数据是由两个寄存器拼接而成的 */
 	Gain = (ADCGAIN_BASE + ((Registers.ADCGain1.ADCGain1Byte & 0x0C) << 1) + ((Registers.ADCGain2.ADCGain2Byte & 0xE0)>> 5)) / 1000.0;
 	iGain = ADCGAIN_BASE + ((Registers.ADCGain1.ADCGain1Byte & 0x0C) << 1) + ((Registers.ADCGain2.ADCGain2Byte & 0xE0)>> 5);
 

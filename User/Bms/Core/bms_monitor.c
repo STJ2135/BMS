@@ -22,12 +22,9 @@
 #include "bms_global.h"
 
 
-
 #define DBG_TAG "monitor"
 #define DBG_LVL DBG_LOG
 #include "rtdbg.h"
-
-
 
 
 // thread config
@@ -38,16 +35,11 @@
 #define MONITOR_TASK_PERIOD		250
 
 
-
 // sample time config  MS
 #define UPDATE_CELL_VOLTAGE_CYCLE	250
 #define UPDAYE_BAT_VOLTAGE_CYCLE	250
 #define UPDATE_CELL_TEMP_CYCLE		2000
 #define UPDATE_BAT_CURRENT_CYCLE	1000
-
-
-
-
 
 
 BMS_MonitorDataTypedef BMS_MonitorData;

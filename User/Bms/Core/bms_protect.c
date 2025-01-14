@@ -262,7 +262,7 @@ static void BMS_ProtectRelieveMonitor(void)
 		else if (BMS_Protect.alert & FlAG_ALERT_OCC)
 		{
 			RelieveCountCHG += PROTECT_TASK_PERIOD;
-			if (RelieveCountCHG / 60 >= BMS_Protect.param.OCCRelieve)
+			if (RelieveCountCHG / 1000 >= BMS_Protect.param.OCCRelieve)
 			{
 				RelieveCountCHG = 0;
 
@@ -309,7 +309,7 @@ static void BMS_ProtectRelieveMonitor(void)
 		else if (BMS_Protect.alert & FlAG_ALERT_OCD)
 		{
 			RelieveCountDSG += PROTECT_TASK_PERIOD;
-			if (RelieveCountDSG / 60 >= BMS_Protect.param.OCDRelieve)
+			if (RelieveCountDSG / 1000 >= BMS_Protect.param.OCDRelieve)
 			{
 				RelieveCountDSG = 0;
 
@@ -322,7 +322,7 @@ static void BMS_ProtectRelieveMonitor(void)
 		else if (BMS_Protect.alert & FlAG_ALERT_SCD)
 		{
 			RelieveCountDSG += PROTECT_TASK_PERIOD;
-			if (RelieveCountDSG / 60 >= BMS_Protect.param.SCDRelieve)
+			if (RelieveCountDSG / 1000 >= BMS_Protect.param.SCDRelieve)
 			{
 				RelieveCountDSG = 0;
 
