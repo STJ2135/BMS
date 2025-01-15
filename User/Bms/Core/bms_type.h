@@ -48,7 +48,7 @@ typedef enum
 	BMS_CELL_INDEX13 	= 0x1000,
 	BMS_CELL_INDEX14 	= 0x2000,
 	BMS_CELL_INDEX15	= 0x4000,
-	BMS_CELL_ALL		= 0x3FFF,
+	BMS_CELL_ALL		= 0x7FFF,
 }BMS_CellIndexTypedef;
 
 
