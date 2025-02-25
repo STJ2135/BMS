@@ -935,8 +935,10 @@ void BQ769X0_Initialize(BQ769X0_InitDataTypedef *InitData)
 	Registers.Protect3.Protect3Bit.OV_DELAY   = InitData->ConfigData.OVDelay;
 
     // BQ阈值寄存器内部比较是14位的，但我们真实写入的值是“10-XXXX-XXXX–1000”中间x的数据，所以下面计算出14位数据后需要得到中间8位再写入
+    // 减去OV_THRESH_BASE就是得到中间8位，，在数据手册7.3.1.2.1章节有讲解
     Registers.OVTrip = (uint8_t)((((uint16_t)((InitData->ConfigData.OVPThreshold - Adcoffset)/Gain/* + 0.5*/) - OV_THRESH_BASE) >> 4) & 0xFF);
     // BQ阈值寄存器内部比较是14位的，但我们真实写入的值是“01-XXXX-XXXX–0000”中间x的数据，所以下面计算出14位数据后需要得到中间8位再写入
+    // 减去UV_THRESH_BASE就是得到中间8位，在数据手册7.3.1.2.1章节有讲解
     Registers.UVTrip = (uint8_t)((((uint16_t)((InitData->ConfigData.UVPThreshold - Adcoffset)/Gain/* + 0.5*/) - UV_THRESH_BASE) >> 4) & 0xFF);
 
 

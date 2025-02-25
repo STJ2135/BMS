@@ -21,11 +21,9 @@
 #include "bms_energy.h"
 #include "bms_global.h"
 
-
 #define DBG_TAG "monitor"
 #define DBG_LVL DBG_LOG
 #include "rtdbg.h"
-
 
 // thread config
 #define MONITOR_TASK_STACK_SIZE	512
@@ -34,17 +32,13 @@
 
 #define MONITOR_TASK_PERIOD		250
 
-
 // sample time config  MS
 #define UPDATE_CELL_VOLTAGE_CYCLE	250
 #define UPDAYE_BAT_VOLTAGE_CYCLE	250
 #define UPDATE_CELL_TEMP_CYCLE		2000
 #define UPDATE_BAT_CURRENT_CYCLE	1000
 
-
 BMS_MonitorDataTypedef BMS_MonitorData;
-
-
 
 static bool FlagSampleIntCur = false;
 
@@ -53,18 +47,14 @@ static bool FlagBatVoltage = true;
 static bool FlagCellTemp = true;
 static bool FlagBatCurrent = true;
 
-
 static uint16_t CountCellVoltage = 0;
 static uint16_t CountBatVoltage = 0;
 static uint16_t CountCellTemp = 0;
 //static uint16_t CountBatCurrent = 0;
 
-
-
 static void BMS_MonitorTaskEntry(void *paramter);
 static void BMS_MonitorBattery(void);
 static void BMS_MonitorSysMode(void);
-
 
 void BMS_MonitorInit(void)
 {
@@ -94,7 +84,6 @@ static void BMS_MonitorTaskEntry(void *paramter)
 		rt_thread_mdelay(MONITOR_TASK_PERIOD);
 	}
 }
-
 
 // 监控电池各项数据
 static void BMS_MonitorBattery(void)
@@ -135,7 +124,6 @@ static void BMS_MonitorBattery(void)
 		CountCellTemp = 0;
 	}
 
-
 	/* 电流采样由软件触发 
 	CountBatCurrent += MONITOR_TASK_PERIOD;
 	if (FlagBatCurrent == true && CountBatCurrent >= UPDATE_BAT_CURRENT_CYCLE)
@@ -149,7 +137,6 @@ static void BMS_MonitorBattery(void)
 	}
 	*/
 
-
 	/* 电流采样由硬件中断触发,太麻烦了,每次烧写都得重新给BQ重新下上电 */
 	if (FlagSampleIntCur == true && FlagBatCurrent == true)
 	{
@@ -157,8 +144,6 @@ static void BMS_MonitorBattery(void)
 		FlagSampleIntCur = false;
 	}
 }
-
-
 
 // 系统模式监控
 // BatteryCurrent > 20mA || BatteryCurrent < -20mA  处于非睡眠模式
@@ -168,85 +153,107 @@ static void BMS_MonitorBattery(void)
 // 20mA这个值根据最终硬件实测决定，测量电池未充放情况下系统静态功耗最大，不然会误触发进入模式
 static void BMS_MonitorSysMode(void)
 {
+#define BMS_STANDBY_CURRENT_NEGA    0.02F
+#define BMS_STANDBY_CURRENT_POSI   -0.02F
+
 	static BMS_SysModeTypedef SysModeBackup = BMS_MODE_NULL;
 	static uint32_t StandbyCount = 0;
 	
-	if (BMS_GlobalParam.SysMode == BMS_MODE_SLEEP)
-	{
-		if ((BMS_MonitorData.BatteryCurrent >= 0.02) || (BMS_MonitorData.BatteryCurrent <= -0.02))
-		{
-			// 可以加唤醒处理逻辑
-			
-			BMS_GlobalParam.SysMode = BMS_MODE_STANDBY;
-			LOG_I("Wake Up");
-		}
-		return;
-	}
+    if (SysModeBackup != BMS_GlobalParam.SysMode)
+    {
+        switch (BMS_GlobalParam.SysMode)
+        {
+            case BMS_MODE_SLEEP:
+                LOG_I("system entry sleep mode");
+                break;
+            case BMS_MODE_STANDBY:
+                LOG_I("system entry standby mode");
+                break;
+            case BMS_MODE_CHARGE:
+                LOG_I("system entry charge mode");
+                break;
+            case BMS_MODE_DISCHARGE:
+                LOG_I("system entry discharge mode");
+                break;
+            case BMS_MODE_NULL:
+                break;
+        }
+        StandbyCount = 0;
+        SysModeBackup = BMS_GlobalParam.SysMode;
+    }
 
-	
-	if (BMS_MonitorData.BatteryCurrent < 0.02 && BMS_MonitorData.BatteryCurrent > -0.02)
-	{
-		BMS_GlobalParam.SysMode = BMS_MODE_STANDBY;	
-		
-		if (StandbyCount >= BMS_ENTRY_SLEEP_TIME * 60000)
-		{
-			if (BMS_EnergyData.BalanceReleaseFlag != true)
-			{
-				// 可以加睡眠低功耗处理逻辑
-				
-				StandbyCount = 0;
-				BMS_GlobalParam.SysMode = BMS_MODE_SLEEP;;
-				
-				LOG_I("Entry Sleep Mode");
-			}
-		}
-		else
-		{
-			StandbyCount += MONITOR_TASK_PERIOD;
-		}
+    switch (BMS_GlobalParam.SysMode)
+    {
+        case BMS_MODE_SLEEP:
+            if (BMS_MonitorData.BatteryCurrent >= BMS_STANDBY_CURRENT_NEGA || BMS_MonitorData.BatteryCurrent <= BMS_STANDBY_CURRENT_POSI)
+            {
+                // 可以加唤醒处理逻辑
+                if (BMS_MonitorData.BatteryCurrent >= BMS_STANDBY_CURRENT_NEGA)
+                {
+                    BMS_GlobalParam.SysMode = BMS_MODE_CHARGE;
+                }
+                else if (BMS_MonitorData.BatteryCurrent <= BMS_STANDBY_CURRENT_POSI)
+                {
+                    BMS_GlobalParam.SysMode = BMS_MODE_DISCHARGE;
+                }
+            }
+            break;
 
+        case BMS_MODE_STANDBY:
+            if (BMS_MonitorData.BatteryCurrent >= BMS_STANDBY_CURRENT_NEGA || BMS_MonitorData.BatteryCurrent <= BMS_STANDBY_CURRENT_POSI)
+            {
+                if (BMS_MonitorData.BatteryCurrent >= BMS_STANDBY_CURRENT_NEGA)
+                {
+                    BMS_GlobalParam.SysMode = BMS_MODE_CHARGE;
+                }
+                else if (BMS_MonitorData.BatteryCurrent <= BMS_STANDBY_CURRENT_POSI)
+                {
+                    BMS_GlobalParam.SysMode = BMS_MODE_DISCHARGE;
+                }
+            }
+            StandbyCount += MONITOR_TASK_PERIOD;
+            if (StandbyCount >= BMS_ENTRY_SLEEP_TIME * 60 * 1000)
+            {
+                if (BMS_EnergyData.BalanceReleaseFlag != true)
+                {
+                    // 可以加睡眠低功耗处理逻辑
+                    BMS_GlobalParam.SysMode = BMS_MODE_SLEEP;
+                }
+            }
+            break;
 
-		// 调试用
-		if (SysModeBackup != BMS_MODE_STANDBY)
-		{
-			SysModeBackup = BMS_MODE_STANDBY;
-			LOG_I("Entry Standby Mode");
-		}
-	}
-	else if (BMS_MonitorData.BatteryCurrent >= 0.02)
-	{
-		StandbyCount = 0;
-		BMS_GlobalParam.SysMode = BMS_MODE_CHARGE;
+        case BMS_MODE_CHARGE:
+            if (BMS_MonitorData.BatteryCurrent < BMS_STANDBY_CURRENT_NEGA)
+            {
+                if (BMS_MonitorData.BatteryCurrent > BMS_STANDBY_CURRENT_POSI)
+                {
+                    BMS_GlobalParam.SysMode = BMS_MODE_STANDBY;
+                }
+                else if (BMS_MonitorData.BatteryCurrent <= BMS_STANDBY_CURRENT_POSI)
+                {
+                    BMS_GlobalParam.SysMode = BMS_MODE_DISCHARGE;
+                }
+            }
+            break;
 
-		// 调试用
-		if (SysModeBackup != BMS_MODE_CHARGE)
-		{
-			SysModeBackup = BMS_MODE_CHARGE;
-			LOG_I("Entry Charge Mode");
-		}
-	}
-	else if (BMS_MonitorData.BatteryCurrent <= -0.02)
-	{
-		StandbyCount = 0;
-		BMS_GlobalParam.SysMode = BMS_MODE_DISCHARGE;
-
-		// 调试用
-		if (SysModeBackup != BMS_MODE_DISCHARGE)
-		{
-			SysModeBackup = BMS_MODE_DISCHARGE;
-			LOG_I("Entry Discharge Mode");
-		}
-	}
+        case BMS_MODE_DISCHARGE:
+            if (BMS_MonitorData.BatteryCurrent > BMS_STANDBY_CURRENT_POSI)
+            {
+                if (BMS_MonitorData.BatteryCurrent < BMS_STANDBY_CURRENT_NEGA)
+                {
+                    BMS_GlobalParam.SysMode = BMS_MODE_STANDBY;
+                }
+                else if (BMS_MonitorData.BatteryCurrent >= BMS_STANDBY_CURRENT_NEGA)
+                {
+                    BMS_GlobalParam.SysMode = BMS_MODE_CHARGE;
+                }
+            }
+            break;
+            
+        case BMS_MODE_NULL:
+            break;
+    }
 }
-
-
-
-
-
-
-
-
-
 
 void BMS_MonitorStateCellVoltage(BMS_StateTypedef NewState)
 {
@@ -296,12 +303,7 @@ void BMS_MonitorStateBatCurrent(BMS_StateTypedef NewState)
 	}	
 }
 
-
-
-
-
 void BMS_MonitorHwCurrent(void)
 {
 	FlagSampleIntCur = true;
 }
-
