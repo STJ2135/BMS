@@ -1,0 +1,17 @@
+{
+    "C_Cpp.default.cStandard": "c99",
+    "files.associations": {
+        "*.h": "c"
+    },
+    "search.exclude": {
+        "MDK-ARM/BMS": true,
+        "MDK-ARM/*.map": true,
+        "MDK-ARM/*.htm": true,
+        "MDK-ARM/*.lst": true,
+        "MDK-ARM/*.bak": true,
+        "MDK-ARM/*.uvguix*": true
+    },
+    "files.watcherExclude": {
+        "**/MDK-ARM/BMS/**": true
+    }
+}

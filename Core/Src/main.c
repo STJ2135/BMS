@@ -27,14 +27,14 @@
 #include <stdio.h>
 #include <rtthread.h>
 
-#include "board.h"
 
-#include "bms_app.h"
+#include "App_BMS.h"
+#include "Int_LED.h"
 
 
 #define DBG_TAG "main"
 #define DBG_LVL DBG_LOG
-#include "rtdbg.h"
+#include "Com_Log.h"
 
 
 /* USER CODE END Includes */
@@ -103,9 +103,9 @@ int main(void)
   MX_CAN_Init();
   /* USER CODE BEGIN 2 */
 
-  //Board_Initialize();
+  //Dri_Board_Init();
 
-  BMS_SysInitialize();
+  App_BMS_Init();
 
   /* USER CODE END 2 */
 
@@ -114,9 +114,9 @@ int main(void)
   while (1)
   {
 
- //CAN_SendTest();
+ //Dri_CAN_SendTest();
  
-	HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
+	Int_LED_ToggleSystem();
 	//rt_kprintf("Hello RT-Thread!\r\n");
 	rt_thread_mdelay(1000);
 

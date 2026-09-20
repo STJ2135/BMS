@@ -339,7 +339,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32F103xB</Define>
               <Undefine></Undefine>
-              <IncludePath>../Core/Inc;../Drivers/STM32F1xx_HAL_Driver/Inc;../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32F1xx/Include;../Drivers/CMSIS/Include;../User/Drivers;../RT-Thread;../Middlewares/Third_Party/RealThread_RTOS/include/;../Middlewares/Third_Party/RealThread_RTOS/bsp/_template/cubemx_config;../Middlewares/Third_Party/RealThread_RTOS/finsh/;../Middlewares/Third_Party/RealThread_RTOS/components/finsh;../User/Bms;../User/Bms/Core;../User/Bms/Hal;../User</IncludePath>
+              <IncludePath>../Core/Inc;../Drivers/STM32F1xx_HAL_Driver/Inc;../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32F1xx/Include;../Drivers/CMSIS/Include;../Com;../Dri;../Int;../Mid;../App;../RT-Thread;../Middlewares/Third_Party/RealThread_RTOS/include/;../Middlewares/Third_Party/RealThread_RTOS/bsp/_template/cubemx_config;../Middlewares/Third_Party/RealThread_RTOS/finsh/;../Middlewares/Third_Party/RealThread_RTOS/components/finsh;</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -719,123 +719,113 @@
             </File>
           </Files>
         </Group>
-        <Group>
-          <GroupName>User/App</GroupName>
+                <Group>
+          <GroupName>Com</GroupName>
           <Files>
             <File>
-              <FileName>board.c</FileName>
+              <FileName>Com_Utils.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\User\board.c</FilePath>
+              <FilePath>..\Com\Com_Utils.c</FilePath>
             </File>
           </Files>
         </Group>
         <Group>
-          <GroupName>User/Bms</GroupName>
+          <GroupName>Dri</GroupName>
           <Files>
             <File>
-              <FileName>bms_app.c</FileName>
+              <FileName>Dri_SoftI2C.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\User\Bms\bms_app.c</FilePath>
+              <FilePath>..\Dri\Dri_SoftI2C.c</FilePath>
+            </File>
+            <File>
+              <FileName>Dri_CAN.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Dri\Dri_CAN.c</FilePath>
+            </File>
+            <File>
+              <FileName>Dri_Board.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Dri\Dri_Board.c</FilePath>
             </File>
           </Files>
         </Group>
         <Group>
-          <GroupName>User/Bms/Core</GroupName>
+          <GroupName>Int</GroupName>
           <Files>
             <File>
-              <FileName>bms_monitor.c</FileName>
+              <FileName>Int_BQ769X0.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\User\Bms\Core\bms_monitor.c</FilePath>
+              <FilePath>..\Int\Int_BQ769X0.c</FilePath>
             </File>
             <File>
-              <FileName>bms_protect.c</FileName>
+              <FileName>Int_RS485.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\User\Bms\Core\bms_protect.c</FilePath>
+              <FilePath>..\Int\Int_RS485.c</FilePath>
             </File>
             <File>
-              <FileName>bms_analysis.c</FileName>
+              <FileName>Int_LED.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\User\Bms\Core\bms_analysis.c</FilePath>
-            </File>
-            <File>
-              <FileName>bms_energy.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\User\Bms\Core\bms_energy.c</FilePath>
-            </File>
-            <File>
-              <FileName>bms_info.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\User\Bms\Core\bms_info.c</FilePath>
-            </File>
-            <File>
-              <FileName>bms_comm.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\User\Bms\Core\bms_comm.c</FilePath>
-            </File>
-            <File>
-              <FileName>bms_msh_commond.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\User\Bms\Core\bms_msh_commond.c</FilePath>
-            </File>
-            <File>
-              <FileName>bms_global.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\User\Bms\Core\bms_global.c</FilePath>
-            </File>
-            <File>
-              <FileName>bms_utils.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\User\Bms\Core\bms_utils.c</FilePath>
+              <FilePath>..\Int\Int_LED.c</FilePath>
             </File>
           </Files>
         </Group>
         <Group>
-          <GroupName>User/Bms/Hal</GroupName>
+          <GroupName>Mid</GroupName>
           <Files>
             <File>
-              <FileName>bms_hal_comm.c</FileName>
+              <FileName>Mid_Comm.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\User\Bms\Hal\bms_hal_comm.c</FilePath>
-            </File>
-            <File>
-              <FileName>bms_hal_control.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\User\Bms\Hal\bms_hal_control.c</FilePath>
-            </File>
-            <File>
-              <FileName>bms_hal_config.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\User\Bms\Hal\bms_hal_config.c</FilePath>
-            </File>
-            <File>
-              <FileName>bms_hal_monitor.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\User\Bms\Hal\bms_hal_monitor.c</FilePath>
+              <FilePath>..\Mid\Mid_Comm.c</FilePath>
             </File>
           </Files>
         </Group>
         <Group>
-          <GroupName>User/Drivers</GroupName>
+          <GroupName>App</GroupName>
           <Files>
             <File>
-              <FileName>drv_soft_i2c.c</FileName>
+              <FileName>App_BMS.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\User\Drivers\drv_soft_i2c.c</FilePath>
+              <FilePath>..\App\App_BMS.c</FilePath>
             </File>
             <File>
-              <FileName>drv_softi2c_bq769x0.c</FileName>
+              <FileName>App_Monitor.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\User\Drivers\drv_softi2c_bq769x0.c</FilePath>
+              <FilePath>..\App\App_Monitor.c</FilePath>
             </File>
             <File>
-              <FileName>drv_rs485.c</FileName>
+              <FileName>App_Protect.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\User\Drivers\drv_rs485.c</FilePath>
+              <FilePath>..\App\App_Protect.c</FilePath>
             </File>
             <File>
-              <FileName>drv_can.c</FileName>
+              <FileName>App_Analysis.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\User\Drivers\drv_can.c</FilePath>
+              <FilePath>..\App\App_Analysis.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_Energy.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\App\App_Energy.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_Info.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\App\App_Info.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_Global.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\App\App_Global.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_Shell.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\App\App_Shell.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_Power.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\App\App_Power.c</FilePath>
             </File>
           </Files>
         </Group>
