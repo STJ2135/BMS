@@ -96,7 +96,7 @@
 
 #define BALANCE_DIFF_VOLTAGE	0.05	// 均衡差异电压(V)
 #define BALANCE_CYCLE_TIME		30		// 均衡周期时间(s)
-#define BALANCE_VOLT_RISE_DELAY	5000	// 均衡电压回升延时(ms)
+#define BALANCE_VOLT_RISE_DELAY	30000	// 均衡电压回升延时(ms):均衡结束后等待电压回升稳定
 /*************************************************************************************/
 
 #endif
