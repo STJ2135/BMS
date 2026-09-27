@@ -35,7 +35,11 @@
 #define ANALYSIS_TASK_PRIORITY		21
 #define ANALYSIS_TASK_TIMESLICE	25
 
-#define ANALYSIS_TASK_PERIOD		1000
+// 线程周期(ms):与 BQ769X0 库仑计 250ms 的积分周期对齐
+#define ANALYSIS_TASK_PERIOD		250
+
+// 基础数据/容量校准/开路电压校准无需每周期执行,每 4 个周期(1s)执行一次
+#define ANALYSIS_TASK_SLOW_DIV		4
 
 // 一小时包含的秒数
 #define ANALYSIS_SEC_PER_HOUR	3600
@@ -68,7 +72,8 @@ static void App_Analysis_TaskEntry(void *parameter);
 
 static void App_Analysis_CalcBasicData(void);
 static void App_Analysis_CalibrateCapacity(void);
-static void App_Analysis_SocCheck(void);
+static void App_Analysis_OcvSocCalculate(void);
+static void App_Analysis_AhSocCalculate(void);
 static void App_Analysis_CapAndSocInit(void);
 
 
@@ -95,12 +100,24 @@ void App_Analysis_Init(void)
 // 电池状态分析任务线程入口
 static void App_Analysis_TaskEntry(void *parameter)
 {
+	uint8_t slow_tick = 0;
+
 	App_Analysis_CapAndSocInit();
 	while(1)
 	{			
-		App_Analysis_CalcBasicData();
-		App_Analysis_CalibrateCapacity();
-		App_Analysis_SocCheck();
+		// 不需要 250ms 一次的计算:基础数据/容量校准/开路电压校准,每 1s 执行一次
+		if (++slow_tick >= ANALYSIS_TASK_SLOW_DIV)
+		{
+			slow_tick = 0;
+
+			App_Analysis_CalcBasicData();
+			App_Analysis_CalibrateCapacity();
+			App_Analysis_OcvSocCalculate();
+		}
+
+		// 安时积分:步长取线程周期(250ms),每个周期都执行
+		App_Analysis_AhSocCalculate();
+
 		rt_thread_mdelay(ANALYSIS_TASK_PERIOD);
 	}
 }
@@ -277,9 +294,14 @@ static void App_Analysis_OcvSocCalculate(void)
 // soc = 实时积分的容量 / 电池包实际容量
 static void App_Analysis_AhSocCalculate(void)
 {
-	// abs取绝对值，除3600把 AS 单位换算成 Ah
-	// 这里为什么要*1000然后再除1000，因为abs只能对整数取绝对值所以要将小数转整数，这里也可以用fabs就不用*1000/1000操作了
-	float current_value = abs((int32_t)(g_st_monitor_data.battery_current * 1000)) / 1000.0 / ANALYSIS_SEC_PER_HOUR;
+	// abs只能对整数取绝对值,所以先*1000转成mA整数,再除1000还原成A
+	float current_ma = abs((int32_t)(g_st_monitor_data.battery_current * 1000));
+
+	// 积分步长(s):取线程周期,与 BQ769X0 库仑计 250ms 的积分周期对齐
+	float step_seconds = ANALYSIS_TASK_PERIOD / 1000.0;
+
+	// 本周期流过的电量(Ah) = |电流|(A) * 步长(s) / 3600
+	float current_value = current_ma / 1000.0 * step_seconds / ANALYSIS_SEC_PER_HOUR;
 
 	if (g_st_global_param.sys_mode == BMS_MODE_STANDBY)
 	{
@@ -335,13 +357,6 @@ static void App_Analysis_AhSocCalculate(void)
 	{
 		g_st_analysis_data.soc = 1;
 	}
-}
-
-// soc检查
-static void App_Analysis_SocCheck(void)
-{
-	App_Analysis_OcvSocCalculate();
-	App_Analysis_AhSocCalculate();
 }
 
 // 容量和SOC上电初始化
