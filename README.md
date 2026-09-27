@@ -80,14 +80,14 @@ BQ769x0 采样 -> 监控模块汇总 -> 保护/分析/能量模块消费 -> 信�
 | --- | --- | --- |
 | `monitor` | 250 ms | 采样与数据整理 |
 | `protect` | 200 ms | 软件保护判定与恢复 |
-| `analysis` | 1000 ms | SOC、压差和功率计算，均衡触发 |
+| `analysis` | 250 ms | 安时积分（步长与周期一致）；基础数据、容量校准、开路电压校准每 4 个周期（1s）执行一次 |
 | `energy` | 200 ms | 充放电策略与均衡周期管理 |
 | `info` | 2000 ms | 周期状态输出 |
 | `comm` | 2000 ms | 通信协议占位线程 |
 | `can_send` | 事件驱动 | 从 CAN 发送队列取消息并发送 |
 | `main` | 1000 ms | 系统心跳、主循环 |
 
-RT-Thread 中断接收路径仅负责完成硬件操作和投递消息，耗时业务处理放在线程中执行。
+AFE 的 ALERT 引脚同时承载「库仑计就绪」与各类保护告警：库仑计就绪只在中断里置标志，由 `monitor` 线程读取；保护告警则在中断上下文里直接读状态并关断 MOS（含软件 I2C 读写与日志输出）。
 
 ## 目录结构
 
@@ -110,9 +110,9 @@ BMS/
 ├─ Core/                       CubeMX 生成的内核与外设初始化
 ├─ Drivers/                    STM32 HAL、CMSIS
 ├─ Middlewares/                RT-Thread 第三方组件
-├─ MDK-ARM/                    Keil 工程、启动文件、RT-Thread 配置
-├─ BMS.ioc                     CubeMX 工程文件
-└─ pic/                        工程图片资料
+├─ RT-Thread/                  RT-Thread 配置（rtconfig.h，实际参与编译）
+├─ MDK-ARM/                    Keil 工程与启动文件
+└─ BMS.ioc                     CubeMX 工程文件
 ```
 
 ## 关键配置
@@ -123,7 +123,7 @@ BMS/
 | `Com/Com_Config.h` | 电芯数量、温度通道数量、温度测量范围 |
 | `BMS.ioc` | CubeMX 外设与引脚配置 |
 | `MDK-ARM/BMS.uvprojx` | Keil 目标、源文件、宏和头文件路径 |
-| `MDK-ARM/RTE/RTOS/rtconfig.h` | RT-Thread 功能裁剪与线程资源 |
+| `RT-Thread/rtconfig.h` | RT-Thread 功能裁剪与线程资源（工程内唯一参与编译的一份） |
 | `Core/Src/main.c` | CubeMX 初始化入口与用户代码挂接点 |
 
 默认额定容量为 `2.2 Ah`，该值尚未通过容量测试仪校准。默认保护参数面向三元锂电池；如使用磷酸铁锂或钛酸锂电池，应修改 `App/App_Config.h` 中的初始参数并重新验证。
@@ -169,7 +169,9 @@ BMS/
 ## 开发约定
 
 - 新增业务模块时保持 `App -> Mid -> Int -> Dri -> Com` 的依赖方向。
-- AFE 中断回调中只做必要的标志置位、锁定和消息投递，不执行阻塞操作。
+- AFE 中断回调应尽量只做标志置位与消息投递，`App_Monitor_OnCcSampleReady` 是范例；保护告警路径 `Int_BQ769X0_AlertHandler` 目前仍在中断里执行软件 I2C 与 `LOG_W`，新增代码不要沿用这种写法。
+- 时间参数集中在各模块顶部的 `*_TASK_PERIOD` 与 `App_Config.h`。安时积分步长直接取 `analysis` 线程周期（250 ms），与 BQ769x0 库仑计 250 ms 的积分周期对齐，修改线程周期会同步改变积分步长。
+- RT-Thread 配置只改 `RT-Thread/rtconfig.h`。工程内还有两份同名副本（`MDK-ARM/RTE/RTOS/rtconfig.h`、`Middlewares/Third_Party/RealThread_RTOS/bsp/_template/cubemx_config/rtconfig.h`），它们不在编译头文件搜索路径的有效位置，改了不生效。
 - 修改 CubeMX 配置后保留 `USER CODE` 区域，并在生成代码后复核外设初始化。
 - 新增源文件后需要同步加入 `MDK-ARM/BMS.uvprojx` 的对应分组。
 - 参数单位统一写在变量名或注释中，电流为 A、电压为 V、温度为 ℃、时间为 ms/s。
@@ -180,6 +182,7 @@ BMS/
 - 当前仅针对 3～5 串 BQ76920 配置，其他 BQ769x0 型号需要同步修改电芯数量、温度通道和 AFE 寄存器配置。
 - 通信层目前为占位实现，CAN 和 RS485 只有底层收发能力，尚无统一协议。
 - 睡眠模式、SOH、SOP、SOE 和循环寿命统计尚未完成。
+- 保护告警在 ALERT 中断上下文内完成软件 I2C 读写与日志输出，单次中断耗时可达毫秒级；安时积分不判断库仑计读数是否为新值，两个 250 ms 时钟长期运行可能错拍。
 - 默认参数不能替代完整的硬件测试。首次上电应使用限流电源和模拟电芯，逐项验证采样精度、保护阈值、延时、MOS 动作和恢复逻辑。
 - BMS 参数错误可能导致电池过充、过放、过热、起火或爆炸。量产和商用前必须完成独立的安全评估与认证。
 
