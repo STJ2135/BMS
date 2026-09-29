@@ -63,9 +63,9 @@ static const uint8_t s_scd_thresh_code = SCD_THRESH_89MV_44MV;
 
 
 // 放电过流(OCD)保护阈值档位
-// 目标 2.2A、分流电阻 5mΩ -> 2.2A x 5mΩ = 11mV,在 8mV / 17mV 两档中应取低档(RSNS = 0)
-// 取 8mV 档后实际保护电流 = 8mV / 5mΩ = 1.6A(取 14mV 档则为 2.8A)
-static const uint8_t s_ocd_thresh_code = OCD_THRESH_17MV_8MV;
+// 目标 2.2A、分流电阻 5mΩ -> 2.2A x 5mΩ = 11mV，取 11mV 档(RSNS = 0)
+// 取 11mV 档后实际保护电流 = 11mV / 5mΩ = 2.2A
+static const uint8_t s_ocd_thresh_code = OCD_THRESH_22MV_11MV;
 
 
 
