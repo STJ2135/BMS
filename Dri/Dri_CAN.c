@@ -1,4 +1,4 @@
-/*
+﻿/*
  * SPDX-License-Identifier: CC BY-NC 4.0
  *
  * http://creativecommons.org/licenses/by-nc/4.0/
@@ -165,7 +165,7 @@ rt_err_t Dri_CAN_RecvMessageFromQueue(CanRxMessage_Struct *p_msg, rt_int32_t tim
 {
 	rt_err_t err = RT_EOK;
 	
-	if ((err = rt_mq_recv(s_p_rx_mq, p_msg, sizeof(CanRxMessage_Struct), timeout)) != RT_EOK)
+	if ((err = rt_mq_recv(s_p_rx_mq, p_msg, sizeof(CanRxMessage_Struct), timeout)) != RT_EOK && err != -RT_ETIMEOUT)
 	{
 		LOG_W("can recv msg fail");
 	}
