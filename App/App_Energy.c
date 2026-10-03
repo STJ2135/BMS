@@ -40,7 +40,7 @@
 #define ENERGY_TASK_PRIORITY	22
 #define ENERGY_TASK_TIMESLICE	25
 
-#define ENERGY_TASK_PERIOD		200
+#define ENERGY_TASK_PERIOD		250
 
 
 BmsEnergyData_Struct g_st_energy_data = 

@@ -40,7 +40,7 @@ typedef struct
 extern BmsEnergyData_Struct g_st_energy_data;
 
 
-// 创建并启动能量管理线程(周期 200ms)
+// 创建并启动能量管理线程(周期 250ms)
 void App_Energy_Init(void);
 
 

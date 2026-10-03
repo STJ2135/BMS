@@ -97,7 +97,7 @@ extern BmsProtect_Struct g_st_protect;
 
 
 
-// 创建并启动保护线程(周期 200ms)
+// 创建并启动保护线程(周期 250ms)
 void App_Protect_Init(void);
 // 读取当前报警标志(内部进临界区,可与中断安全并发)
 BmsProtectAlertType App_Protect_GetAlert(void);
